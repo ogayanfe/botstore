@@ -6,7 +6,7 @@ import Sidenav from "./Sidenav";
 const LayoutContainer = () => {
     return (
         <div className="flex w-screeen h-screen flex-row-reverse">
-            <main className="flex-grow dark:bg-[#141517] flex flex-col">
+            <main className="flex-grow dark:bg-[#141517] flex flex-col xm:max-xl:pl-14">
                 <Header />
                 <div className="flex-grow">
                     <Outlet />
