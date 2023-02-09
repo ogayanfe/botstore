@@ -3,14 +3,15 @@ import {
     createBrowserRouter,
     Route,
     RouterProvider,
+    redirect,
 } from "react-router-dom";
 
 import LayoutContainer from "./layout/LayoutContainer";
 import AuthContextProvider from "./context/authcontext";
-import Login from "./pages/Login";
+import Login, { signInAction } from "./pages/Login";
 import AuthLayout from "./layout/AuthLayout";
 import Signup from "./pages/Signup";
-import { getApiClient } from "./utils/authutils";
+import { getAuthTokens } from "./utils/authutils";
 
 function Child() {
     return <h1>Hello World</h1>;
@@ -23,18 +24,26 @@ const route = createBrowserRouter(
                 path="/"
                 element={<LayoutContainer />}
                 loader={() => {
-                    const apiClient = getApiClient();
-                    apiClient.get("https://random-d.uk/api/random/").then((d) => {
-                        console.log(d);
-                    });
+                    if (!getAuthTokens()) {
+                        return redirect("/login");
+                    }
                     return null;
                 }}
             >
                 <Route path="/home" element={<Child />} />
             </Route>
 
-            <Route path="/" element={<AuthLayout />}>
-                <Route path="/login" element={<Login />} />
+            <Route
+                path="/"
+                element={<AuthLayout />}
+                loader={() => {
+                    if (getAuthTokens()) {
+                        return redirect("/");
+                    }
+                    return null;
+                }}
+            >
+                <Route path="/login" element={<Login />} action={signInAction} />
                 <Route path="/signup" element={<Signup />} />
             </Route>
         </Route>

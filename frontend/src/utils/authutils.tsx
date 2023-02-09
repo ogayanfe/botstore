@@ -4,11 +4,11 @@ import jwtDecode from "jwt-decode";
 
 let axiosClient: AxiosInstance | null = null;
 
-const BASE_URL = "http://localhost:8000/";
+const BASE_URL = "http://localhost:8000";
 
-const TOKEN_OBTAIN_URL = `${BASE_URL}/api/accounts/token/refresh`;
+const TOKEN_OBTAIN_URL = `${BASE_URL}/api/accounts/token/`;
 
-const TOKEN_REFRESH_URL = `${BASE_URL}/api/accounts/token/`;
+const TOKEN_REFRESH_URL = `${BASE_URL}/api/accounts/token/refresh/`;
 
 const STORAGE_KEY = "tokens";
 
@@ -46,7 +46,7 @@ function getAuthTokens(): AuthTokenType | null {
     return authTokens;
 }
 
-function saveAuthTokens(tokens: AuthTokenType) {
+function updateAuthTokens(tokens: AuthTokenType) {
     // Update authentication tokens
     const value = JSON.stringify(tokens);
     localStorage.setItem(STORAGE_KEY, value);
@@ -89,7 +89,6 @@ function addInterceptors(apiClient: AxiosInstance) {
             // If the users don't have tokens do nothing
             return config;
         }
-
         const accessTokenDecoded = jwtDecode<AccessTokenDecodedType>(authTokens.access); // decode access tokens
         const isExpired = dayjs.unix(parseInt(accessTokenDecoded.exp)).diff(dayjs()) < 1; // check for expiration
 
@@ -110,13 +109,20 @@ function addInterceptors(apiClient: AxiosInstance) {
             return config;
         }
 
-        saveAuthTokens(response.data); // Persist to storage
+        updateAuthTokens(response.data); // Persist to storage
         config.headers.Authorization = `Bearer ${response.data.access}`; // set authorization token
 
         return config;
     });
 }
 
-// export AuthTokenType
-export { getApiClient, getAuthTokens, BASE_URL, saveAuthTokens, clearAuthTokens };
 export type { AuthTokenType, AccessTokenDecodedType, RefreshTokenDecodedType };
+export {
+    getApiClient,
+    getAuthTokens,
+    BASE_URL,
+    updateAuthTokens,
+    clearAuthTokens,
+    TOKEN_OBTAIN_URL,
+    TOKEN_REFRESH_URL,
+};
