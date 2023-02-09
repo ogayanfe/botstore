@@ -1,10 +1,10 @@
 import { FC, useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
+import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
 
 const Sidenav: FC = () => {
     const [showSideBar, setShowSideBar] = useState(false);
 
-    const responsiveWidthClasses = `${showSideBar ? "w-56" : " w-0 xl:w-56  xm:w-14"}`;
+    const responsiveWidthClasses = `${showSideBar ? "w-64" : " w-0 xl:w-64  xm:w-14"}`;
 
     return (
         <nav
@@ -13,11 +13,13 @@ const Sidenav: FC = () => {
             <button
                 aria-label="toggle sidebar menu"
                 className={` xm:absolute top-3   xm:right-3 xl:hidden duration-300 ${
-                    showSideBar ? "absolute rotate-[720deg] max-xm:right-3" : "fixed max-xm:left-3"
+                    showSideBar
+                        ? "absolute rotate-[810deg] max-xm:right-3"
+                        : "fixed max-xm:left-3 -rotate-90"
                 }`}
                 onClick={() => setShowSideBar((prev) => !prev)}
             >
-                <MenuIcon style={{ fontSize: "2rem" }} />
+                <ExpandCircleDownIcon style={{ fontSize: "2rem" }} />
             </button>
         </nav>
     );

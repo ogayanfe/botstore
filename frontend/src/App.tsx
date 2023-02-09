@@ -6,7 +6,7 @@ import {
     redirect,
 } from "react-router-dom";
 
-import LayoutContainer from "./layout/LayoutContainer";
+import LayoutContainer, { layoutContainerLoader } from "./layout/LayoutContainer";
 import AuthContextProvider from "./context/authcontext";
 import Login, { signInAction } from "./pages/Login";
 import AuthLayout from "./layout/AuthLayout";
@@ -20,16 +20,7 @@ function Child() {
 const route = createBrowserRouter(
     createRoutesFromElements(
         <Route>
-            <Route
-                path="/"
-                element={<LayoutContainer />}
-                loader={() => {
-                    if (!getAuthTokens()) {
-                        return redirect("/login");
-                    }
-                    return null;
-                }}
-            >
+            <Route path="/" element={<LayoutContainer />} loader={layoutContainerLoader}>
                 <Route path="/home" element={<Child />} />
             </Route>
 

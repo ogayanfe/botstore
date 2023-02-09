@@ -3,8 +3,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Avatar } from "@mui/material";
 import { FC } from "react";
+import { useAuthContext } from "../context/authcontext";
 
 const Header: FC = () => {
+    const { profileData } = useAuthContext();
     const avatarStyle = { width: "35px", height: "35px" };
 
     return (
@@ -23,7 +25,7 @@ const Header: FC = () => {
                         type="text"
                         name="search"
                         id="header__search"
-                        placeholder="search..."
+                        placeholder="Search..."
                         className="w-16 transition-all bg-black outline-none px-2 text-sm  xm:w-20 xxm:focus:w-32 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 xl:w-80 focus:xl:w-96"
                     />
                 </form>
@@ -32,13 +34,13 @@ const Header: FC = () => {
                         <NotificationsNoneIcon />
                     </button>
                     <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
+                        alt={profileData?.username.toUpperCase()}
+                        src="PLACE HOLDER URL"
                         sx={avatarStyle}
                         aria-label="profile picture"
                     />
                     <p aria-label="username" className="text-[0px] xm:text-lg">
-                        Denis
+                        {profileData?.username}
                     </p>
                     <button aria-label="Open additional options" aria-haspopup>
                         <KeyboardArrowDownIcon />
