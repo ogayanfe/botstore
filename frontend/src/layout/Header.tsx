@@ -1,6 +1,7 @@
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import SmartToySharpIcon from "@mui/icons-material/SmartToySharp";
 import { Avatar } from "@mui/material";
 import { FC } from "react";
 import { useAuthContext } from "../context/authcontext";
@@ -11,10 +12,17 @@ const Header: FC = () => {
 
     return (
         <header className="h-14 flex items-center justify-between max-xm:pl-16 px-4 dark:text-gray-200">
-            <h1 className="italic text-xl flex items-center">
-                <span className="xm:hidden">BS</span>
-                <span className="max-xm:hidden">BoxStore</span>
-            </h1>
+            <div className="italic h-full text-2xl flex items-center justify-center gap-2 xl:invisible">
+                <span className="relative -top-[0.2rem]">
+                    <SmartToySharpIcon />
+                </span>
+                <h1>
+                    <span className="max-sm:absolute -left-[20000px]">BoxStore</span>
+                    <span className="sm:hidden" aria-hidden={true}>
+                        BS
+                    </span>
+                </h1>
+            </div>
             <div className="flex gap-2 md:gap-14">
                 <form className="bg-black  p-2 rounded-2xl sm:gap-2 flex items-center justify-center">
                     <label htmlFor="header__search" className="flex items-center justify-center">

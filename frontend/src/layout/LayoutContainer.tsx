@@ -11,6 +11,8 @@ const LayoutContainer = () => {
     const data = useLoaderData() as ProfileData;
 
     useEffect(() => {
+        // set the profile data to the newly recovered data so
+        // all routes can make use of it
         setProfileData(data);
     }, [data]);
 
@@ -30,6 +32,7 @@ const LayoutContainer = () => {
 export default LayoutContainer;
 
 const layoutContainerLoader = async () => {
+    // Get the user profile data and return it
     const tokens = getAuthTokens();
     if (!tokens) {
         return redirect("/login");

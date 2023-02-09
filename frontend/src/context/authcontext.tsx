@@ -29,7 +29,6 @@ function AuthContextProvider({ children }: Props) {
         profileData: profileData,
         setProfileData: setProfileData,
     };
-    console.log(profileData);
     return <userContext.Provider value={context}>{children}</userContext.Provider>;
 }
 
