@@ -12,16 +12,13 @@ import Login, { signInAction } from "./pages/Login";
 import AuthLayout from "./layout/AuthLayout";
 import Signup from "./pages/Signup";
 import { getAuthTokens } from "./utils/authutils";
-
-function Child() {
-    return <h1>Hello World</h1>;
-}
+import { Dashboard } from "./pages/Dashboard";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route path="/" element={<LayoutContainer />} loader={layoutContainerLoader}>
-                <Route path="/home" element={<Child />} />
+                <Route path="/" element={<Dashboard />} />
             </Route>
 
             <Route

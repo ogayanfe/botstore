@@ -17,7 +17,7 @@ const Header: FC = () => {
                     <SmartToySharpIcon />
                 </span>
                 <h1>
-                    <span className="max-sm:absolute -left-[20000px]">BoxStore</span>
+                    <span className="max-sm:absolute -left-[20000px]">BotStore</span>
                     <span className="sm:hidden" aria-hidden={true}>
                         BS
                     </span>
