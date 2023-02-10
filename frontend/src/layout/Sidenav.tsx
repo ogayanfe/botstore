@@ -61,7 +61,7 @@ function SideNavElement({ label, Icon, open, target }: SideNavElementPropType) {
 
 function SideNavElementContainer({ elements, open }: SideNavElementContainerPropType) {
     const elementsComponents = elements.map((element) => {
-        return <SideNavElement {...element} open={open} />;
+        return <SideNavElement {...element} open={open} key={Date() + element.label} />;
     });
     return <div className="mt-8 flex flex-col gap-7">{elementsComponents}</div>;
 }

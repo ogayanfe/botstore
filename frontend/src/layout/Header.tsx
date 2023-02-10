@@ -23,7 +23,7 @@ const Header: FC = () => {
                     </span>
                 </h1>
             </div>
-            <div className="flex gap-2 md:gap-14">
+            <nav className="flex gap-2 md:gap-14">
                 <form className="bg-black  p-2 rounded-2xl sm:gap-2 flex items-center justify-center">
                     <label htmlFor="header__search" className="flex items-center justify-center">
                         <span className="fixed left-[-3000000px]">Search</span>
@@ -37,7 +37,7 @@ const Header: FC = () => {
                         className="w-16 transition-all bg-black outline-none px-2 text-sm  xm:w-20 xxm:focus:w-32 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 xl:w-80 focus:xl:w-96"
                     />
                 </form>
-                <nav className="flex items-center justify-center xm:gap-2 md:gap-3 gap-1">
+                <div className="flex items-center justify-center xm:gap-2 md:gap-3 gap-1">
                     <button className="text-xl">
                         <NotificationsNoneIcon />
                     </button>
@@ -47,14 +47,14 @@ const Header: FC = () => {
                         sx={avatarStyle}
                         aria-label="profile picture"
                     />
-                    <p aria-label="username" className="text-[0px] xm:text-lg">
+                    <p aria-label="username" className="text-[0px] xm:text-md">
                         {profileData?.username}
                     </p>
                     <button aria-label="Open additional options" aria-haspopup>
                         <KeyboardArrowDownIcon />
                     </button>
-                </nav>
-            </div>
+                </div>
+            </nav>
         </header>
     );
 };
