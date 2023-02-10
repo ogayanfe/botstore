@@ -11,10 +11,10 @@ function Login() {
     const { labelClasses, inputClasses, buttonClasses } = useAuthLayoutOutletContext();
     return (
         <>
-            <label htmlFor="login__username" className={labelClasses}>
+            <label htmlFor="login__email" className={labelClasses}>
                 Username
             </label>
-            <input type="text" name="username" id="login__username" className={inputClasses} />
+            <input type="text" name="email" id="login__email" className={inputClasses} />
             <label htmlFor="login__password" className={labelClasses}>
                 Password
             </label>

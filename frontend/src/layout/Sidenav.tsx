@@ -31,7 +31,7 @@ const _elementNames: SideNavElement[] = [
     { label: "Dark Mode", target: "#dark", Icon: DarkModeRoundedIcon },
 ];
 
-function SideNavElement({ label, Icon, open, target }: SideNavElementPropType) {
+function SideNavElementComponent({ label, Icon, open, target }: SideNavElementPropType) {
     const navLinkClassName = `flex  overflow-hidden w-full origin-left items-center gap-6 transition-all duration-700 text-xl ${
         open ? "" : "max-xm:scale-0"
     }`;
@@ -61,7 +61,7 @@ function SideNavElement({ label, Icon, open, target }: SideNavElementPropType) {
 
 function SideNavElementContainer({ elements, open }: SideNavElementContainerPropType) {
     const elementsComponents = elements.map((element) => {
-        return <SideNavElement {...element} open={open} key={Date() + element.label} />;
+        return <SideNavElementComponent {...element} open={open} key={Date() + element.label} />;
     });
     return <div className="mt-8 flex flex-col gap-7">{elementsComponents}</div>;
 }

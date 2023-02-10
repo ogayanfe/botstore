@@ -2,7 +2,12 @@ import jwtDecode from "jwt-decode";
 import { useEffect } from "react";
 import { Outlet, redirect, useLoaderData } from "react-router-dom";
 import { ProfileData, useAuthContext } from "../context/authcontext";
-import { AccessTokenDecodedType, getApiClient, getAuthTokens } from "../utils/authutils";
+import {
+    AccessTokenDecodedType,
+    clearAuthTokens,
+    getApiClient,
+    getAuthTokens,
+} from "../utils/authutils";
 import Header from "./Header";
 import Sidenav from "./Sidenav";
 
@@ -14,7 +19,7 @@ const LayoutContainer = () => {
         // set the profile data to the newly recovered data so
         // all routes can make use of it
         setProfileData(data);
-    }, [data]);
+    }, [data, setProfileData]);
 
     return (
         <div className="flex w-screen h-screen flex-row-reverse dark:bg-[#141517]">
@@ -40,8 +45,14 @@ const layoutContainerLoader = async () => {
     const apiClient = getApiClient();
 
     const { user_id } = jwtDecode<AccessTokenDecodedType>(tokens.access);
-    const response = await apiClient.get(`/api/accounts/${user_id}/`);
-    return response.data;
+
+    try {
+        const response = await apiClient.get(`/api/accounts/${user_id}/`);
+        return response.data;
+    } catch (e) {
+        clearAuthTokens();
+        return redirect("/login");
+    }
 };
 
 export { layoutContainerLoader };
