@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
-import { getApiClient, getAuthTokens } from "../utils/authutils";
-import { useState, useEffect } from "react";
+import { getAuthTokens } from "../utils/authutils";
+import { useState } from "react";
 
 type Props = {
     children: React.ReactNode;

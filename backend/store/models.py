@@ -25,6 +25,9 @@ class Store(models.Model):
             return False
         return self.accessible_users.filter(id=user.id) or self.owner == user
 
+    def __str__(self):
+        return f"store: {self.name}"
+
 
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True, blank=False)
@@ -32,6 +35,9 @@ class Category(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
     description = models.TextField()
     thumbnail = models.ImageField(upload_to="images/categories", blank=False)
+
+    def __str__(self):
+        return f"category: {self.name} | store: {self.store.name}"
 
 
 class Product(models.Model):
@@ -43,6 +49,9 @@ class Product(models.Model):
     weight = models.IntegerField(null=True)
     wait_time = models.DurationField(null=True, default=None)
     is_public = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"product: {self.name} | category: {self.category.name} | store: {self.category.store.name}"
 
     @classmethod
     def user_accessible_products(cls, user):

@@ -30,15 +30,21 @@ async function signInAction({ request }: { request: Request }) {
     const apiClient = getApiClient();
     const data = await request.formData();
 
-    const response = await apiClient.post<AuthTokenType>(TOKEN_OBTAIN_URL, data);
+    try {
+        const response = await apiClient.post<AuthTokenType>(TOKEN_OBTAIN_URL, data);
 
-    if (response.status !== 200) {
+        if (response.status !== 200) {
+            alert("Invalid username or password");
+            return redirect("/login");
+        }
+
+        updateAuthTokens(response.data);
+        return redirect("/");
+    } catch (e) {
         alert("Invalid username or password");
-        return redirect("/login");
+        redirect("/loging");
     }
-
-    updateAuthTokens(response.data);
-    return redirect("/");
+    return null;
 }
 
 export { signInAction };
