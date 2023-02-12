@@ -13,6 +13,7 @@ import AuthLayout from "./layout/AuthLayout";
 import Signup from "./pages/Signup";
 import { getAuthTokens } from "./utils/authutils";
 import { Dashboard } from "./pages/Dashboard";
+import ThemeContextProvider from "./context/themeContext";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
@@ -41,7 +42,9 @@ const route = createBrowserRouter(
 function App() {
     return (
         <AuthContextProvider>
-            <RouterProvider router={route} />
+            <ThemeContextProvider>
+                <RouterProvider router={route} />
+            </ThemeContextProvider>
         </AuthContextProvider>
     );
 }

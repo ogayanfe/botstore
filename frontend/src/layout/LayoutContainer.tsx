@@ -22,8 +22,8 @@ const LayoutContainer = () => {
     }, [data, setProfileData]);
 
     return (
-        <div className="flex w-screen h-screen flex-row-reverse bg-white dark:bg-[#141517]">
-            <main className="flex-grow  flex flex-col xm:max-xl:pl-14">
+        <div className="flex w-screen h-screen flex-row-reverse bg-blue-50 dark:bg-[#141517]">
+            <main className="flex-grow  flex flex-col xm:max-2xl:pl-14">
                 <Header />
                 <div className="flex-grow">
                     <Outlet />

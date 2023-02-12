@@ -5,7 +5,6 @@ import SmartToySharpIcon from "@mui/icons-material/SmartToySharp";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import LocalGroceryStoreRoundedIcon from "@mui/icons-material/LocalGroceryStoreRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
 interface SideNavElement {
@@ -28,17 +27,17 @@ const _elementNames: SideNavElement[] = [
     { label: "Teams", target: "/team", Icon: GroupWorkRoundedIcon },
     { label: "Stores", target: "/store", Icon: LocalGroceryStoreRoundedIcon },
     { label: "Settings", target: "/settings", Icon: SettingsRoundedIcon },
-    { label: "Dark Mode", target: "#dark", Icon: DarkModeRoundedIcon },
+    // { label: "Dark Mode", target: "#dark", Icon: DarkModeRoundedIcon },
 ];
 
 function SideNavElementComponent({ label, Icon, open, target }: SideNavElementPropType) {
     const navLinkClassName = `flex  overflow-hidden w-full origin-left items-center gap-6 transition-all duration-700 text-xl ${
         open ? "" : "max-xm:scale-0"
     }`;
-    const activeClasses = `${navLinkClassName} ${target.at(0) === "#" ? "" : "text-blue-400"}`;
+    const activeClasses = `${navLinkClassName} ${target.at(0) === "#" ? "" : "text-blue-500"}`;
 
     return (
-        <div className="pl-[26%] text-gray-200 hover:scale-110 transition-all">
+        <div className="pl-[26%] text-gray-100 dark:text-gray-200 hover:scale-110 transition-all">
             <NavLink
                 // className={className}
                 to={target}
@@ -49,7 +48,7 @@ function SideNavElementComponent({ label, Icon, open, target }: SideNavElementPr
                 </span>
                 <span
                     className={`${
-                        open ? "scale-100" : "max-xl:scale-0 max-xl:text-[0px] origin-right"
+                        open ? "scale-100" : "max-2xl:scale-0 max-2xl:text-[0px] origin-right"
                     } transition-all  duration-200`}
                 >
                     {label}
@@ -69,12 +68,12 @@ function SideNavElementContainer({ elements, open }: SideNavElementContainerProp
 const Sidenav: FC = () => {
     const [showSideBar, setShowSideBar] = useState(false);
 
-    const responsiveWidthClasses = `${showSideBar ? "w-64" : "max-xm:w-[0] xl:w-64 xm:w-14"}`;
-    const sideBarLogoStore = `${showSideBar ? "scale-100" : "max-xl:scale-0"}`;
+    const responsiveWidthClasses = `${showSideBar ? "w-64" : "max-xm:w-[0] 2xl:w-64 xm:w-14"}`;
+    const sideBarLogoStore = `${showSideBar ? "scale-100" : "max-2xl:scale-0"}`;
 
     return (
         <nav
-            className={`dark:bg-[#1e1f24] fixed h-screen xl:relative left-0 text-blue-400 transition-all duration-700 ${responsiveWidthClasses} flex flex-col`}
+            className={`bg-gray-900 dark:bg-[#1e1f24] fixed h-screen 2xl:relative left-0 text-blue-400 transition-all duration-700 ${responsiveWidthClasses} flex flex-col`}
         >
             <header className="h-14 flex items-center justify-center overflow-hidden">
                 <div
@@ -85,7 +84,7 @@ const Sidenav: FC = () => {
                 </div>
                 <button
                     aria-label="toggle sidebar menu"
-                    className={` xm:absolute top-3   xm:right-3 xl:hidden duration-300 ${
+                    className={` xm:absolute top-3 xm:right-3 2xl:hidden duration-300 ${
                         showSideBar
                             ? "absolute rotate-[810deg] max-xm:right-3"
                             : "fixed max-xm:left-3 -rotate-90"
