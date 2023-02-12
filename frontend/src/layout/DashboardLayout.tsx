@@ -1,6 +1,7 @@
 import jwtDecode from "jwt-decode";
 import { useEffect } from "react";
 import { Outlet, redirect, useLoaderData } from "react-router-dom";
+import DashboardHeader from "../components/DashboardHeader";
 import { ProfileData, useAuthContext } from "../context/authcontext";
 import {
     AccessTokenDecodedType,
@@ -8,10 +9,9 @@ import {
     getApiClient,
     getAuthTokens,
 } from "../utils/authutils";
-import Header from "./Header";
-import Sidenav from "./Sidenav";
+import DashboardSidenav from "../components/DashboardSidenav";
 
-const LayoutContainer = () => {
+const DashboardLayout = () => {
     const { setProfileData } = useAuthContext();
     const data = useLoaderData() as ProfileData;
 
@@ -24,19 +24,19 @@ const LayoutContainer = () => {
     return (
         <div className="flex w-screen h-screen flex-row-reverse bg-blue-50 dark:bg-[#141517]">
             <main className="flex-grow  flex flex-col xm:max-2xl:pl-14">
-                <Header />
+                <DashboardHeader />
                 <div className="flex-grow">
                     <Outlet />
                 </div>
             </main>
-            <Sidenav></Sidenav>
+            <DashboardSidenav></DashboardSidenav>
         </div>
     );
 };
 
-export default LayoutContainer;
+export default DashboardLayout;
 
-const layoutContainerLoader = async () => {
+const dashboardLayoutLoader = async () => {
     // Get the user profile data and return it
     const tokens = getAuthTokens();
     if (!tokens) {
@@ -55,4 +55,4 @@ const layoutContainerLoader = async () => {
     }
 };
 
-export { layoutContainerLoader };
+export { dashboardLayoutLoader };

@@ -1,5 +1,5 @@
 import { FC } from "react";
 
-export const Dashboard: FC = () => {
+export default function DashboardHome() {
     return <div></div>;
-};
+}

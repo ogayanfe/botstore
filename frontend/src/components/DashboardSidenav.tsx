@@ -7,22 +7,22 @@ import LocalGroceryStoreRoundedIcon from "@mui/icons-material/LocalGroceryStoreR
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
-interface SideNavElement {
+interface DashboardSideNavElement {
     label: string;
     Icon: FC;
     target: string;
 }
 
-interface SideNavElementPropType extends SideNavElement {
+interface DashboardSideNavElementPropType extends DashboardSideNavElement {
     open: Boolean;
 }
 
-interface SideNavElementContainerPropType {
-    elements: SideNavElement[];
+interface DashboardSideNavElementContainerPropType {
+    elements: DashboardSideNavElement[];
     open: Boolean;
 }
 
-const _elementNames: SideNavElement[] = [
+const _elementNames: DashboardSideNavElement[] = [
     { label: "Dashboard", target: "/", Icon: DashboardRoundedIcon },
     { label: "Teams", target: "/team", Icon: GroupWorkRoundedIcon },
     { label: "Stores", target: "/store", Icon: LocalGroceryStoreRoundedIcon },
@@ -30,7 +30,7 @@ const _elementNames: SideNavElement[] = [
     // { label: "Dark Mode", target: "#dark", Icon: DarkModeRoundedIcon },
 ];
 
-function SideNavElementComponent({ label, Icon, open, target }: SideNavElementPropType) {
+function SideNavElementComponent({ label, Icon, open, target }: DashboardSideNavElementPropType) {
     const navLinkClassName = `flex  overflow-hidden w-full origin-left items-center gap-6 transition-all duration-700 text-xl ${
         open ? "" : "max-xm:scale-0"
     }`;
@@ -58,14 +58,14 @@ function SideNavElementComponent({ label, Icon, open, target }: SideNavElementPr
     );
 }
 
-function SideNavElementContainer({ elements, open }: SideNavElementContainerPropType) {
+function SideNavElementContainer({ elements, open }: DashboardSideNavElementContainerPropType) {
     const elementsComponents = elements.map((element) => {
         return <SideNavElementComponent {...element} open={open} key={Date() + element.label} />;
     });
     return <div className="mt-8 flex flex-col gap-7">{elementsComponents}</div>;
 }
 
-const Sidenav: FC = () => {
+const DashboardSidenav: FC = () => {
     const [showSideBar, setShowSideBar] = useState(false);
 
     const responsiveWidthClasses = `${showSideBar ? "w-64" : "max-xm:w-[0] 2xl:w-64 xm:w-14"}`;
@@ -102,4 +102,4 @@ const Sidenav: FC = () => {
     );
 };
 
-export default Sidenav;
+export default DashboardSidenav;

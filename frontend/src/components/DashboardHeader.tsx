@@ -8,7 +8,7 @@ import { FC } from "react";
 import { useAuthContext } from "../context/authcontext";
 import { useThemeContext } from "../context/themeContext";
 
-const Header: FC = () => {
+const DashboardHeader: FC = () => {
     const { profileData } = useAuthContext();
     const avatarStyle = { width: "35px", height: "35px" };
     const { darkTheme, setDarkTheme } = useThemeContext();
@@ -62,4 +62,4 @@ const Header: FC = () => {
     );
 };
 
-export default Header;
+export default DashboardHeader;

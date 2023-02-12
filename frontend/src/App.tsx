@@ -6,20 +6,20 @@ import {
     redirect,
 } from "react-router-dom";
 
-import LayoutContainer, { layoutContainerLoader } from "./layout/LayoutContainer";
+import DashboardLayout, { dashboardLayoutLoader } from "./layout/DashboardLayout";
 import AuthContextProvider from "./context/authcontext";
 import Login, { signInAction } from "./pages/Login";
 import AuthLayout from "./layout/AuthLayout";
 import Signup from "./pages/Signup";
 import { getAuthTokens } from "./utils/authutils";
-import { Dashboard } from "./pages/Dashboard";
+import DashboardHome from "./pages/DashboardHome";
 import ThemeContextProvider from "./context/themeContext";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
         <Route>
-            <Route path="/" element={<LayoutContainer />} loader={layoutContainerLoader}>
-                <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={<DashboardLayout />} loader={dashboardLayoutLoader}>
+                <Route path="/" element={<DashboardHome />} />
             </Route>
 
             <Route
