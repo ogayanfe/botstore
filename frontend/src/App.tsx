@@ -17,29 +17,37 @@ import ThemeContextProvider from "./context/themeContext";
 import DashboardTeam from "./pages/DashboardTeam";
 import DashboardSettings from "./pages/DashboardSettings";
 import DashboardStore from "./pages/DashboardStore";
+import ErrorPage from "./components/ErrorPage";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
-        <Route>
-            <Route path="/" element={<DashboardLayout />} loader={dashboardLayoutLoader}>
-                <Route path="/" element={<DashboardHome />} />
-                <Route path="/team/" element={<DashboardTeam />} />
-                <Route path="/settings/" element={<DashboardSettings />} />
-                <Route path="/store/" element={<DashboardStore />} />
-            </Route>
-
-            <Route
-                path="/"
-                element={<AuthLayout />}
-                loader={() => {
-                    if (getAuthTokens()) {
-                        return redirect("/");
-                    }
-                    return null;
-                }}
-            >
-                <Route path="/login" element={<Login />} action={signInAction} />
-                <Route path="/signup" element={<Signup />} />
+        <Route errorElement={<ErrorPage />}>
+            <Route errorElement={<ErrorPage />}>
+                <Route
+                    path="/"
+                    element={<AuthLayout />}
+                    loader={() => {
+                        if (getAuthTokens()) {
+                            return redirect("dashboard");
+                        }
+                        return null;
+                    }}
+                >
+                    <Route index element={<div>Home page</div>}></Route>
+                    <Route path="/login" element={<Login />} action={signInAction} />
+                    <Route path="/signup" element={<Signup />} />
+                </Route>
+                <Route
+                    path="dashboard"
+                    element={<DashboardLayout />}
+                    loader={dashboardLayoutLoader}
+                >
+                    <Route path="" element={<DashboardHome />} />
+                    <Route path="team" element={<DashboardTeam />} />
+                    <Route path="settings" element={<DashboardSettings />} />
+                    <Route path="store" element={<DashboardStore />} />
+                    <Route path="*" element={<ErrorPage />} />
+                </Route>
             </Route>
         </Route>
     )
