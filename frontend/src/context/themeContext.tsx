@@ -12,13 +12,11 @@ type contextType = {
 const themeContext = createContext({});
 
 function getDefaultDarkTheme(): boolean {
-    if (
-        localStorage.isDark === "true" ||
-        (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
-        return true;
+    let themeSet = localStorage.getItem("isDark");
+    if (!themeSet) {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
-    return false;
+    return localStorage.isDark === "true";
 }
 
 function ThemeContextProvider({ children }: Prop) {
