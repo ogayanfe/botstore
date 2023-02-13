@@ -14,12 +14,18 @@ import Signup from "./pages/Signup";
 import { getAuthTokens } from "./utils/authutils";
 import DashboardHome from "./pages/DashboardHome";
 import ThemeContextProvider from "./context/themeContext";
+import DashboardTeam from "./pages/DashboardTeam";
+import DashboardSettings from "./pages/DashboardSettings";
+import DashboardStore from "./pages/DashboardStore";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
         <Route>
             <Route path="/" element={<DashboardLayout />} loader={dashboardLayoutLoader}>
                 <Route path="/" element={<DashboardHome />} />
+                <Route path="/team/" element={<DashboardTeam />} />
+                <Route path="/settings/" element={<DashboardSettings />} />
+                <Route path="/store/" element={<DashboardStore />} />
             </Route>
 
             <Route
