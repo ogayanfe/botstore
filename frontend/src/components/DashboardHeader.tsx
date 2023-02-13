@@ -8,6 +8,24 @@ import { FC } from "react";
 import { useAuthContext } from "../context/authcontext";
 import { useThemeContext } from "../context/themeContext";
 
+function SearchForm() {
+    return (
+        <form className="w-max bg-black p-2 rounded-2xl sm:gap-2 flex items-center text-gray-300 justify-center">
+            <label htmlFor="header__search" className="flex items-center justify-center">
+                <span className="fixed left-[-3000000px]">Search</span>
+                <SearchIcon />
+            </label>
+            <input
+                type="text"
+                name="search"
+                id="header__search"
+                placeholder="Search..."
+                className="w-16 transition-all bg-inherit outline-none px-2 text-sm xm:w-20 xxm:focus:w-32 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 2xl:w-80 focus:2xl:w-96"
+            />
+        </form>
+    );
+}
+
 const DashboardHeader: FC = () => {
     const { profileData } = useAuthContext();
     const avatarStyle = { width: "35px", height: "35px" };
@@ -27,19 +45,7 @@ const DashboardHeader: FC = () => {
                 </h1>
             </div>
             <nav className="flex gap-2 md:gap-14">
-                <form className="bg-black p-2 rounded-2xl sm:gap-2 flex items-center text-gray-300 justify-center">
-                    <label htmlFor="header__search" className="flex items-center justify-center">
-                        <span className="fixed left-[-3000000px]">Search</span>
-                        <SearchIcon />
-                    </label>
-                    <input
-                        type="text"
-                        name="search"
-                        id="header__search"
-                        placeholder="Search..."
-                        className="w-16 transition-all bg-black outline-none px-2 text-sm  xm:w-20 xxm:focus:w-32 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 2xl:w-80 focus:2xl:w-96"
-                    />
-                </form>
+                {/* <SearchForm /> */}
                 <div className="flex items-center justify-center xm:gap-2 md:gap-3 gap-1">
                     <button className="text-xl">
                         <NotificationsNoneIcon />
@@ -63,3 +69,4 @@ const DashboardHeader: FC = () => {
 };
 
 export default DashboardHeader;
+export { SearchForm };

@@ -23,7 +23,7 @@ interface DashboardSideNavElementContainerPropType {
 }
 
 const _elementNames: DashboardSideNavElement[] = [
-    { label: "Dashboard", target: "", Icon: DashboardRoundedIcon },
+    { label: "Dashboard", target: "./", Icon: DashboardRoundedIcon },
     { label: "Team", target: "team", Icon: GroupWorkRoundedIcon },
     { label: "Stores", target: "store", Icon: LocalGroceryStoreRoundedIcon },
     { label: "Settings", target: "settings", Icon: SettingsRoundedIcon },
