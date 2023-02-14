@@ -26,7 +26,7 @@ function SearchFormComponent(props: SearchFormComponentType) {
                 name="search"
                 id="header__search"
                 placeholder={placeholder}
-                className="w-16 transition-all bg-inherit outline-none px-2 text-sm xm:w-20 xxm:focus:w-32 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 2xl:w-80 focus:2xl:w-96"
+                className="transition-all bg-inherit outline-none px-2 text-sm w-32 focus:w-36 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 2xl:w-80 focus:2xl:w-96"
             />
         </form>
     );
