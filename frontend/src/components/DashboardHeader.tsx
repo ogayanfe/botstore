@@ -1,30 +1,11 @@
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import SearchIcon from "@mui/icons-material/Search";
 import SmartToySharpIcon from "@mui/icons-material/SmartToySharp";
 import { Avatar } from "@mui/material";
 import { FC } from "react";
 import { useAuthContext } from "../context/authcontext";
 import { useThemeContext } from "../context/themeContext";
-
-function SearchForm() {
-    return (
-        <form className="w-max bg-black p-2 rounded-2xl sm:gap-2 flex items-center text-gray-300 justify-center">
-            <label htmlFor="header__search" className="flex items-center justify-center">
-                <span className="fixed left-[-3000000px]">Search</span>
-                <SearchIcon />
-            </label>
-            <input
-                type="text"
-                name="search"
-                id="header__search"
-                placeholder="Search..."
-                className="w-16 transition-all bg-inherit outline-none px-2 text-sm xm:w-20 xxm:focus:w-32 md:w-48 focus:md:w-64 lg:w-64 focus:lg:w-80 2xl:w-80 focus:2xl:w-96"
-            />
-        </form>
-    );
-}
 
 const DashboardHeader: FC = () => {
     const { profileData } = useAuthContext();
@@ -69,4 +50,3 @@ const DashboardHeader: FC = () => {
 };
 
 export default DashboardHeader;
-export { SearchForm };
