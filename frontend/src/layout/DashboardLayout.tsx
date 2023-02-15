@@ -17,10 +17,10 @@ const DashboardLayout = () => {
     }, [data, setProfileData]);
 
     return (
-        <div className="flex w-screen h-screen flex-row-reverse bg-blue-50 dark:bg-[#141517]">
-            <main className="flex-grow  flex flex-col xm:max-2xl:pl-14">
+        <div className="flex w-full h-screen flex-row-reverse bg-blue-50 dark:bg-[#141517]">
+            <main className="flex-grow flex flex-col xm:max-2xl:pl-14 h-full w-full overflow-auto">
                 <DashboardHeader />
-                <div className="flex-grow">
+                <div className="flex-grow h-full">
                     <Outlet />
                 </div>
             </main>

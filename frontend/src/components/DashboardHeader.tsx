@@ -19,7 +19,7 @@ function getRouteHeaderFromPath(path: string): string {
 
 const DashboardHeader: FC = () => {
     const { profileData } = useAuthContext();
-    const avatarStyle = { width: "35px", height: "35px" };
+    const avatarStyle = { width: "33px", height: "33px" };
     const { darkTheme, setDarkTheme } = useThemeContext();
     const location = useLocation();
     const [headerText, setHeaderText] = useState(() => getRouteHeaderFromPath(location.pathname));
@@ -29,8 +29,8 @@ const DashboardHeader: FC = () => {
     }, [location]);
 
     return (
-        <header className="h-14 flex items-center justify-between max-xm:pl-16 px-4 dark:text-gray-200">
-            <div className="italiac h-full text-2xl flex items-center justify-center font-bold text-gray-900 dark:text-gray-200 gap-2 2xl:invisible">
+        <header className="h-14 flex pt-2 items-center justify-between max-xm:pl-16 px-4 dark:text-gray-200">
+            <div className="italiac h-full text-2xl flex items-center justify-center font-bold text-gray-900 dark:text-gray-200 gap-2">
                 <span className="relative -top-[0.2rem]">
                     <SmartToySharpIcon />
                 </span>

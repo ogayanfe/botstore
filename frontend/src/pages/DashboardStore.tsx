@@ -15,8 +15,11 @@ function StoreHeader() {
 
 function DashboardStore() {
     return (
-        <div className="p-2">
-            <StoreHeader />
+        <div className="p-2 pt-6 bg-inherit">
+            <div className="sticky top-0 bg-blue-50 dark:bg-[#141517]">
+                <StoreHeader />
+            </div>
+            {new Array(30).fill(<div>Hello World</div>)}
         </div>
     );
 }
