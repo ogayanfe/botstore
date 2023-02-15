@@ -3,22 +3,17 @@ import { useEffect } from "react";
 import { Outlet, redirect, useLoaderData } from "react-router-dom";
 import DashboardHeader from "../components/DashboardHeader";
 import { ProfileData, useAuthContext } from "../context/authcontext";
-import {
-    AccessTokenDecodedType,
-    clearAuthTokens,
-    getApiClient,
-    getAuthTokens,
-} from "../utils/authutils";
+import { AccessTokenDecodedType, getApiClient, getAuthTokens } from "../utils/authutils";
 import DashboardSidenav from "../components/DashboardSidenav";
 
 const DashboardLayout = () => {
     const { setProfileData } = useAuthContext();
-    const data = useLoaderData() as ProfileData;
+    const data = useLoaderData() as { data: ProfileData };
 
     useEffect(() => {
         // set the profile data to the newly recovered data so
         // all routes can make use of it
-        setProfileData(data);
+        setProfileData(data.data);
     }, [data, setProfileData]);
 
     return (
@@ -34,8 +29,6 @@ const DashboardLayout = () => {
     );
 };
 
-export default DashboardLayout;
-
 const dashboardLayoutLoader = async () => {
     // Get the user profile data and return it
     const tokens = getAuthTokens();
@@ -46,13 +39,8 @@ const dashboardLayoutLoader = async () => {
 
     const { user_id } = jwtDecode<AccessTokenDecodedType>(tokens.access);
 
-    try {
-        const response = await apiClient.get(`/api/accounts/${user_id}/`);
-        return response.data;
-    } catch (e) {
-        clearAuthTokens();
-        return redirect("/login");
-    }
+    return apiClient.get(`/api/accounts/${user_id}/`);
 };
 
+export default DashboardLayout;
 export { dashboardLayoutLoader };

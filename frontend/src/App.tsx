@@ -34,8 +34,8 @@ const route = createBrowserRouter(
                     }}
                 >
                     <Route index element={<div>Home page</div>}></Route>
-                    <Route path="/login" element={<Login />} action={signInAction} />
-                    <Route path="/signup" element={<Signup />} />
+                    <Route path="login" element={<Login />} action={signInAction} />
+                    <Route path="signup" element={<Signup />} />
                 </Route>
                 <Route
                     path="dashboard"
