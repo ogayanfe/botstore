@@ -4,6 +4,8 @@ import { SearchFormComponent } from "../components/SearchFormComponent";
 import { getApiClient, getAuthTokens, UserType } from "../utils/authutils";
 import { redirect, useLoaderData, Link } from "react-router-dom";
 import { AxiosResponse } from "axios";
+import { useDashboardLayoutOutletData } from "../layout/DashboardLayout";
+import { useEffect } from "react";
 
 interface StoreType {
     id: number;
@@ -73,7 +75,10 @@ function StoreListContainerComponent({ storeList }: { storeList: StoreType[] }) 
 
 function DashboardStore() {
     const { data } = useLoaderData() as AxiosResponse<StoreType[]>;
-
+    const { setHeaderText } = useDashboardLayoutOutletData();
+    useEffect(() => {
+        setHeaderText("Store");
+    }, [setHeaderText]);
     return (
         <div className="p-2 pt-6 bg-inherit h-full">
             <div className="sticky top-0 bg-blue-50 dark:bg-[#141517]">
