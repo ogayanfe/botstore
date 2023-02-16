@@ -12,6 +12,14 @@ const TOKEN_REFRESH_URL = `${BASE_URL}/api/accounts/token/refresh/`;
 
 const STORAGE_KEY = "tokens";
 
+interface UserType {
+    id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    username: string;
+}
+
 let authTokens: AuthTokenType | null = null;
 
 type AuthTokenType = {
@@ -116,7 +124,7 @@ function addInterceptors(apiClient: AxiosInstance) {
     });
 }
 
-export type { AuthTokenType, AccessTokenDecodedType, RefreshTokenDecodedType };
+export type { AuthTokenType, AccessTokenDecodedType, RefreshTokenDecodedType, UserType };
 export {
     getApiClient,
     getAuthTokens,

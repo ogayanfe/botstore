@@ -33,7 +33,7 @@ function SideNavElementComponent({ label, Icon, open, target }: DashboardSideNav
     const navLinkClassName = `flex  overflow-hidden w-full origin-left items-center gap-6 transition-all duration-700 text-xl ${
         open ? "" : "max-xm:scale-0"
     }`;
-    const activeClasses = `${navLinkClassName} ${target.at(0) === "#" ? "" : "text-blue-500"}`;
+    const activeClasses = `${navLinkClassName} text-blue-500`;
 
     return (
         <div className="pl-[26%] text-gray-100 dark:text-gray-200 hover:scale-110 transition-all">

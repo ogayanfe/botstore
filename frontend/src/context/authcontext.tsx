@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { getAuthTokens } from "../utils/authutils";
+import { getAuthTokens, UserType } from "../utils/authutils";
 import { useState } from "react";
 
 type Props = {
@@ -14,13 +14,7 @@ type AuthContextValueType = {
     setProfileData: (p: ProfileData) => void;
 };
 
-type ProfileData = {
-    id: number;
-    email: string;
-    first_name: string;
-    last_name: string;
-    username: string;
-};
+interface ProfileData extends UserType {}
 
 function AuthContextProvider({ children }: Props) {
     const [profileData, setProfileData] = useState<ProfileData | null>(null);

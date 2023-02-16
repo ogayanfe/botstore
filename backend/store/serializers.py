@@ -6,6 +6,7 @@ from accounts.serializers import UserSerializer
 class StoreSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     accessible_users = UserSerializer(many=True, read_only=True)
+    created_string = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Store
@@ -19,6 +20,9 @@ class StoreSerializer(serializers.ModelSerializer):
         obj = super().create(validated_data)
         obj.accessible_users.add(owner)
         return obj
+
+    def get_created_string(self, obj):
+        return obj.created_string
 
 
 class CategorySerializer(serializers.ModelSerializer):

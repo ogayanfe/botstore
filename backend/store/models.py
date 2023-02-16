@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.humanize.templatetags.humanize import naturaltime
 
 # Create your models here.
 
@@ -16,6 +17,11 @@ class Store(models.Model):
     accessible_users = models.ManyToManyField(
         User, related_name="accessible_stores", blank=True)
     is_public = models.BooleanField(null=False, default=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def created_string(self):
+        return naturaltime(self.created)
 
     def user_can_edit(self, user):
         return user.id == self.owner.id
