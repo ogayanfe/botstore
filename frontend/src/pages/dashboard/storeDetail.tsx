@@ -48,7 +48,7 @@ function DashboardStoreDetail() {
     useEffect(() => {
         setHeaderText("Store Details");
         document.title = "Store Details | " + data.name;
-    }, [setHeaderText]);
+    }, [setHeaderText, data.name]);
     return (
         <div className="h-full">
             <div className=" bg-blue-50 dark:bg-[#141517] sticky top-0">

@@ -84,6 +84,46 @@ function getApiClient(): AxiosInstance {
     return axiosClient;
 }
 
+let refreshingToken = false;
+async function newAccessTokens(refresh: string): Promise<AuthTokenType | null> {
+    // I have to access the new tokens this way because react router runs each loader in
+    // paralell so when requesting for new tokens multiple request a fired at the same time
+    // only the first request that reaches the server succeeds because the server blacklist the
+    // refresh token so all other requests fail with a status of unauthorized by doing this am
+    // forcing all other requests to wait for whoever first requests for new tokens and giving does
+    // retrieved tokens to all the other request.
+
+    // whoever gets here while a request for new tokens as to wait for the result
+    while (refreshingToken) {
+        // using a while loop without waiting a few seconds doesn't work
+        // using a promise here as an artificial timer
+        await new Promise((r) => {
+            setTimeout(() => {
+                r(null);
+            }, 50);
+        });
+
+        if (!refreshingToken) {
+            // return the access tokens that has already been set by previous request
+            return getAuthTokens();
+        }
+    }
+
+    refreshingToken = true;
+    const response = await axios.post<AuthTokenType>(TOKEN_REFRESH_URL, {
+        refresh: refresh,
+    });
+    if (response.status !== 200) {
+        refreshingToken = false;
+        clearAuthTokens();
+        return null;
+    }
+
+    updateAuthTokens(response.data);
+    refreshingToken = false;
+    return response.data;
+}
+
 function addInterceptors(apiClient: AxiosInstance) {
     apiClient.interceptors.request.use(async (config) => {
         // The interceptor job is to check if user tokens exist or is till below the
@@ -107,18 +147,11 @@ function addInterceptors(apiClient: AxiosInstance) {
         }
 
         // request new access tokens
-        const response = await axios.post<AuthTokenType>(TOKEN_REFRESH_URL, {
-            refresh: authTokens.refresh,
-        });
-        console.log(response);
-        if (response.status !== 200) {
-            // Refresh tokens are no longer valid so clear the tokens
-            clearAuthTokens();
+        const tokens = await newAccessTokens(authTokens.refresh);
+        if (!tokens) {
             return config;
         }
-
-        updateAuthTokens(response.data); // Persist to storage
-        config.headers.Authorization = `Bearer ${response.data.access}`; // set authorization token
+        config.headers.Authorization = `Bearer ${tokens.access}`; // set authorization token
 
         return config;
     });

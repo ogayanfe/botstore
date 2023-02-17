@@ -45,11 +45,7 @@ function NoStoreComponent() {
 function StoreListItemComponent({ storeInfo }: { storeInfo: StoreType }) {
     return (
         <li className="flex w-full items-center p-4 gap-3 bg-inherit shadow-sm shadow-gray-500 dark:shadow-black rounded-md">
-            <img
-                src="http://localhost:8000/media/images/products/shaji.png"
-                alt="logo"
-                className="w-20 bg-auto"
-            ></img>
+            <img src={storeInfo.logo} alt="logo" className="w-20 bg-auto"></img>
             <div className="flex flex-col relative flex-grow">
                 <Link
                     className="text-blue-500 text-xl pl-1 font-semibold w-max hover:scale-[1.07] duration-150"
