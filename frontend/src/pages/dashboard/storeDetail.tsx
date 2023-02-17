@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDashboardLayoutOutletData } from "../layout/DashboardLayout";
-import { getApiClient } from "../utils/authutils";
+import { useDashboardLayoutOutletData } from "../../layout/DashboardLayout";
+import { getApiClient } from "../../utils/authutils";
 import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
-import { StoreType } from "./DashboardStore";
+import { StoreType } from "./store";
 import { Tabs, Tab } from "@mui/material";
 import InsightsIcon from "@mui/icons-material/Insights";
 import SettingsIcon from "@mui/icons-material/Settings";

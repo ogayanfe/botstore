@@ -1,4 +1,4 @@
-import { useDashboardLayoutOutletData } from "../layout/DashboardLayout";
+import { useDashboardLayoutOutletData } from "../../layout/DashboardLayout";
 import { useEffect } from "react";
 
 function DashboardSettings() {

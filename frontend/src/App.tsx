@@ -12,12 +12,12 @@ import Login, { signInAction } from "./pages/Login";
 import AuthLayout from "./layout/AuthLayout";
 import Signup from "./pages/Signup";
 import { getAuthTokens } from "./utils/authutils";
-import DashboardHome from "./pages/DashboardHome";
+import DashboardHome from "./pages/dashboard/home";
 import ThemeContextProvider from "./context/themeContext";
-import DashboardTeam from "./pages/DashboardTeam";
-import DashboardSettings from "./pages/DashboardSettings";
-import DashboardStore, { dashboardStoreLoader } from "./pages/DashboardStore";
-import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/DashboardStoreDetail";
+import DashboardTeam from "./pages/dashboard/team";
+import DashboardSettings from "./pages/dashboard/settings";
+import DashboardStore, { dashboardStoreLoader } from "./pages/dashboard/store";
+import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/dashboard/storeDetail";
 import ErrorPage from "./components/ErrorPage";
 
 const route = createBrowserRouter(

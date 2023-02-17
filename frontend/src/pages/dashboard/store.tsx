@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { SearchFormComponent } from "../components/SearchFormComponent";
-import { getApiClient, getAuthTokens, UserType } from "../utils/authutils";
+import { SearchFormComponent } from "../../components/SearchFormComponent";
+import { getApiClient, getAuthTokens, UserType } from "../../utils/authutils";
 import { redirect, useLoaderData, Link } from "react-router-dom";
 import { AxiosResponse } from "axios";
-import { useDashboardLayoutOutletData } from "../layout/DashboardLayout";
+import { useDashboardLayoutOutletData } from "../../layout/DashboardLayout";
 import { useEffect } from "react";
 
 interface StoreType {
