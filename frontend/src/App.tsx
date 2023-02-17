@@ -19,6 +19,11 @@ import DashboardSettings from "./pages/dashboard/settings";
 import DashboardStore, { dashboardStoreLoader } from "./pages/dashboard/store";
 import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/dashboard/storeDetail";
 import ErrorPage from "./components/ErrorPage";
+import DashboardStoreInsights from "./pages/dashboard/storedetails/Insights";
+import DashboardStoreCategories from "./pages/dashboard/storedetails/categories";
+import DashboardStoreProducts from "./pages/dashboard/storedetails/products";
+import DashboardStoreTransactions from "./pages/dashboard/storedetails/transactions";
+import DashboardStoreSettings from "./pages/dashboard/storedetails/settings";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
@@ -56,7 +61,11 @@ const route = createBrowserRouter(
                         element={<DashboardStoreDetail />}
                         loader={dashboardStoreDetailLoader}
                     >
-                        <Route path="*" element={<div>Helo World</div>} />
+                        <Route path="insights" element={<DashboardStoreInsights />} />
+                        <Route path="categories" element={<DashboardStoreCategories />} />
+                        <Route path="products" element={<DashboardStoreProducts />} />
+                        <Route path="transactions" element={<DashboardStoreTransactions />} />
+                        <Route path="settings" element={<DashboardStoreSettings />} />
                     </Route>
                     <Route path="*" element={<ErrorPage />} />
                 </Route>

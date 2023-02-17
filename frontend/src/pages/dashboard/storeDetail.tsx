@@ -46,7 +46,8 @@ function DashboardStoreDetail() {
     const { data } = useLoaderData() as { data: StoreType };
 
     useEffect(() => {
-        setHeaderText("Store detail");
+        setHeaderText("Store Details");
+        document.title = "Store Details | " + data.name;
     }, [setHeaderText]);
     return (
         <div className="h-full">
