@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDashboardLayoutOutletData } from "../../layout/DashboardLayout";
 import { getApiClient } from "../../utils/authutils";
-import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { Link, LoaderFunctionArgs, Outlet, useLoaderData } from "react-router-dom";
 import { StoreType } from "./store";
 import { Tabs, Tab } from "@mui/material";
-import InsightsIcon from "@mui/icons-material/Insights";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 
 const storeHeaderNavValues = [
-    { label: "Insights", icon: <InsightsIcon />, to: "insights" },
-    { label: "Categories", icon: <CategoryOutlinedIcon />, to: "categories" },
-    { label: "Products", icon: <ShoppingCartOutlinedIcon />, to: "products" },
-    { label: "Transactions", icon: <ReceiptOutlinedIcon />, to: "transactions" },
-    { label: "Settings", icon: <SettingsIcon />, to: "settings" },
+    { label: "Insights", to: "insights" },
+    { label: "Categories", to: "categories" },
+    { label: "Products", to: "products" },
+    { label: "Transactions", to: "transactions" },
+    { label: "Settings", to: "settings" },
 ];
 
 interface storeHeaderProps {
@@ -30,7 +25,7 @@ function StoreHeader({ name, id }: storeHeaderProps) {
     });
 
     return (
-        <nav className="flex flex-col lg:flex-row justify-between px-3 lg:px-8 items-center w-full">
+        <nav className="flex flex-col lg:flex-row .g-font max-lg:gap-4 justify-between px-3 pt-4 max-w-[100rem] lg:px-8 items-center w-full">
             <h2 className="text-blue-600 dark:text-blue-300 text-2xl min-w-[10rem]">{name}</h2>
             <div className="flex-grow flex w-full justify-center lg:justify-end">
                 <Tabs value={currentTab} variant="scrollable" onChange={(_, v) => setCurrentTab(v)}>
@@ -50,9 +45,12 @@ function DashboardStoreDetail() {
         document.title = "Store Details | " + data.name;
     }, [setHeaderText, data.name]);
     return (
-        <div className="h-full">
-            <div className=" bg-blue-50 dark:bg-[#141517] sticky top-0">
+        <div className="h-full flex flex-col">
+            <div className=" bg-blue-50 dark:bg-[#141517] sticky top-0 flex justify-center">
                 <StoreHeader id={data.id} name={data.name} />
+            </div>
+            <div>
+                <Outlet />
             </div>
         </div>
     );

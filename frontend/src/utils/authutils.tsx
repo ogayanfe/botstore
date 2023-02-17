@@ -100,7 +100,7 @@ async function newAccessTokens(refresh: string): Promise<AuthTokenType | null> {
         await new Promise((r) => {
             setTimeout(() => {
                 r(null);
-            }, 50);
+            }, 10);
         });
 
         if (!refreshingToken) {
