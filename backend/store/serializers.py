@@ -26,11 +26,17 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    store = StoreSerializer(read_only=True)
+    # store = StoreSerializer(read_only=True)
+    store = None
 
     class Meta:
         model = models.Category
-        fields = "__all__"
+        exclude = ("store",)
+
+    def create(self, validated_data):
+        store = self.context.get("store")
+        validated_data["store"] = validated_data.get("store", store)
+        return super().create(validated_data)
 
 
 class ProductSerializer(serializers.ModelSerializer):

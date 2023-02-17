@@ -15,4 +15,8 @@ urlpatterns = [
         "<int:store_id>/cat/<int:cat_id>/createproduct/",
         views.ProductCreateAPIView.as_view()
     ),
+    path("<int:store_id>/categories/",
+         views.CategoriesListCreateAPIView.as_view()),
+    path("<int:store_id>/cat/<int:cat_id>/",
+         views.CategoryRetrieveUpdateDestroyAPIView.as_view())
 ]

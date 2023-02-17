@@ -108,3 +108,45 @@ class ProductRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
             return models.Product.objects.filter(is_public=True)
 
         return models.Product.objects.filter(is_public=True) | models.Product.user_accessible_products(user)
+
+
+class CategoriesListCreateAPIView(ListCreateAPIView):
+    serializer_class = serializers.CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        store_id = self.kwargs.get("store_id")
+        user = self.request.user
+        store = get_object_or_404(models.Store, pk=store_id)
+        if self.request.method != "GET":
+            if not store.accessible_users.contains(user) or store.owner == user:
+                raise Http404
+
+        return models.Category.objects.filter(store=store)
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx["store"] = get_object_or_404(
+            models.Store, pk=self.kwargs.get("store_id"))
+        return ctx
+
+
+class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.CategorySerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    lookup_url_kwarg = "cat_id"
+
+    def get_queryset(self):
+        store_id = self.kwargs.get("store_id")
+        cat_id = self.kwargs.get("cat_id")
+        user = self.request.user
+        category = get_object_or_404(models.Category, pk=cat_id)
+        store = get_object_or_404(models.Store, pk=store_id)
+        if not category.store == store:
+            raise Http404
+        if self.request.method == "GET":
+            print(store.category_set.all())
+            return store.category_set.all()
+        if store.accessible_users.contains(user) or store.owner == user:
+            return store.category_set.all()
+        raise Http404
