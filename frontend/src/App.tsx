@@ -55,7 +55,9 @@ const route = createBrowserRouter(
                         path="store/:storeId"
                         element={<DashboardStoreDetail />}
                         loader={dashboardStoreDetailLoader}
-                    ></Route>
+                    >
+                        <Route path="*" element={<div>Helo World</div>} />
+                    </Route>
                     <Route path="*" element={<ErrorPage />} />
                 </Route>
             </Route>

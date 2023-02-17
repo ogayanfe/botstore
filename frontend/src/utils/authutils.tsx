@@ -110,7 +110,7 @@ function addInterceptors(apiClient: AxiosInstance) {
         const response = await axios.post<AuthTokenType>(TOKEN_REFRESH_URL, {
             refresh: authTokens.refresh,
         });
-
+        console.log(response);
         if (response.status !== 200) {
             // Refresh tokens are no longer valid so clear the tokens
             clearAuthTokens();

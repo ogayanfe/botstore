@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDashboardLayoutOutletData } from "../layout/DashboardLayout";
 import { getApiClient } from "../utils/authutils";
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { Link, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { StoreType } from "./DashboardStore";
 import { Tabs, Tab } from "@mui/material";
 import InsightsIcon from "@mui/icons-material/Insights";
@@ -11,11 +11,11 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 
 const storeHeaderNavValues = [
-    { label: "Insights", icon: <InsightsIcon />, href: "" },
-    { label: "Categories", icon: <CategoryOutlinedIcon />, href: "" },
-    { label: "Products", icon: <ShoppingCartOutlinedIcon />, href: "" },
-    { label: "Transactions", icon: <ReceiptOutlinedIcon />, href: "" },
-    { label: "Settings", icon: <SettingsIcon />, href: "" },
+    { label: "Insights", icon: <InsightsIcon />, to: "insights" },
+    { label: "Categories", icon: <CategoryOutlinedIcon />, to: "categories" },
+    { label: "Products", icon: <ShoppingCartOutlinedIcon />, to: "products" },
+    { label: "Transactions", icon: <ReceiptOutlinedIcon />, to: "transactions" },
+    { label: "Settings", icon: <SettingsIcon />, to: "settings" },
 ];
 
 interface storeHeaderProps {
@@ -26,11 +26,11 @@ interface storeHeaderProps {
 function StoreHeader({ name, id }: storeHeaderProps) {
     const [currentTab, setCurrentTab] = useState(0);
     const tabComponents = storeHeaderNavValues.map((s) => {
-        return <Tab {...s} iconPosition="start" key={s.label + s.href} />;
+        return <Tab {...s} iconPosition="start" key={s.label + s.to} component={Link} />;
     });
 
     return (
-        <nav className="flex flex-col lg:flex-row justify-between p-1 lg:px-8 items-center w-full">
+        <nav className="flex flex-col lg:flex-row justify-between px-3 lg:px-8 items-center w-full">
             <h2 className="text-blue-600 dark:text-blue-300 text-2xl min-w-[10rem]">{name}</h2>
             <div className="flex-grow flex w-full justify-center lg:justify-end">
                 <Tabs value={currentTab} variant="scrollable" onChange={(_, v) => setCurrentTab(v)}>
