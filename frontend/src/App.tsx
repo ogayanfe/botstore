@@ -17,6 +17,7 @@ import ThemeContextProvider from "./context/themeContext";
 import DashboardTeam from "./pages/DashboardTeam";
 import DashboardSettings from "./pages/DashboardSettings";
 import DashboardStore, { dashboardStoreLoader } from "./pages/DashboardStore";
+import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/DashboardStoreDetail";
 import ErrorPage from "./components/ErrorPage";
 
 const route = createBrowserRouter(
@@ -50,6 +51,11 @@ const route = createBrowserRouter(
                         element={<DashboardStore />}
                         loader={dashboardStoreLoader}
                     />
+                    <Route
+                        path="store/:storeId"
+                        element={<DashboardStoreDetail />}
+                        loader={dashboardStoreDetailLoader}
+                    ></Route>
                     <Route path="*" element={<ErrorPage />} />
                 </Route>
             </Route>

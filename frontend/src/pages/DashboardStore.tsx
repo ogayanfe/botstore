@@ -68,7 +68,7 @@ function StoreListItemComponent({ storeInfo }: { storeInfo: StoreType }) {
 
 function StoreListContainerComponent({ storeList }: { storeList: StoreType[] }) {
     const storeListItemsComponents = storeList.map((store) => (
-        <StoreListItemComponent storeInfo={store} />
+        <StoreListItemComponent storeInfo={store} key={store.id} />
     ));
     return <ol className="py-3 px-2 grid md:grid-cols-2 gap-4">{storeListItemsComponents}</ol>;
 }
@@ -103,4 +103,5 @@ function dashboardStoreLoader() {
 }
 
 export default DashboardStore;
+export type { StoreType };
 export { dashboardStoreLoader };

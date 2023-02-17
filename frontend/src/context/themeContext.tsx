@@ -1,3 +1,4 @@
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { createContext, useContext, useState, useEffect } from "react";
 
 type Prop = {
@@ -21,7 +22,11 @@ function getDefaultDarkTheme(): boolean {
 
 function ThemeContextProvider({ children }: Prop) {
     const [darkTheme, setDarkTheme] = useState(getDefaultDarkTheme());
-
+    const muiDarkTheme = createTheme({
+        palette: {
+            mode: darkTheme ? "dark" : "light",
+        },
+    });
     const context = {
         setDarkTheme: setDarkTheme,
         darkTheme: darkTheme,
@@ -36,7 +41,11 @@ function ThemeContextProvider({ children }: Prop) {
         document.documentElement.classList.remove("dark");
     }, [darkTheme]);
 
-    return <themeContext.Provider value={context}>{children}</themeContext.Provider>;
+    return (
+        <themeContext.Provider value={context}>
+            <ThemeProvider theme={muiDarkTheme}>{children}</ThemeProvider>
+        </themeContext.Provider>
+    );
 }
 
 const useThemeContext = () => {
