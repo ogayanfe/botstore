@@ -1,10 +1,9 @@
-import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import { Form, LoaderFunctionArgs, useLoaderData, useRouteLoaderData } from "react-router-dom";
-import { useState } from "react";
+import { FormControl, InputLabel, Select, MenuItem, Button, Menu } from "@mui/material";
+import { Form, LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
-import { StoreType } from "../store";
 
 interface ProductType {
     id: number;
@@ -16,8 +15,19 @@ interface ProductType {
     is_public: boolean;
 }
 
-function Header() {
-    const [currentCategory, setCurrentCategory] = useState("");
+interface HeaderPropsType {}
+
+function Header(props: HeaderPropsType) {
+    const [currentCategory, setCurrentCategory] = useState("All");
+    const [categories, setCategories] = useState<CategoryType[]>([]);
+    const { storeId } = useParams();
+
+    useEffect(() => {
+        const apiClient = getApiClient();
+        apiClient.get(`/api/store/${storeId}/categories/`).then((response) => {
+            setCategories(response.data);
+        });
+    }, [getApiClient]);
 
     return (
         <nav className="flex justify-end px-8 p-6">
@@ -40,10 +50,14 @@ function Header() {
                         }}
                         value={currentCategory}
                     >
-                        <MenuItem value="">All</MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
+                        <MenuItem value="All">All</MenuItem>
+                        {categories.map((c) => {
+                            return (
+                                <MenuItem value={c.name} key={c.id}>
+                                    {c.name}
+                                </MenuItem>
+                            );
+                        })}
                     </Select>
                 </FormControl>
                 <Button endIcon={<AddIcon />} variant="contained" color="primary" size="small">
@@ -56,7 +70,7 @@ function Header() {
 
 export default function DashboardStoreProducts() {
     const { data: productsList } = useLoaderData() as { data: ProductType[] };
-    const { data: storeInfo } = useRouteLoaderData("storeDetailsHome") as { data: StoreType };
+
     return (
         <div>
             <Header />
