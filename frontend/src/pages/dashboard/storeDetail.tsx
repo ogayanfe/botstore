@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDashboardLayoutOutletData } from "../../layout/DashboardLayout";
 import { getApiClient } from "../../utils/authutils";
-import { Link, LoaderFunctionArgs, Outlet, useLoaderData } from "react-router-dom";
+import { NavLink, LoaderFunctionArgs, Outlet, useLoaderData } from "react-router-dom";
 import { StoreType } from "./store";
 import { Tabs, Tab } from "@mui/material";
 
 const storeHeaderNavValues = [
-    { label: "Insights", to: "insights" },
+    { label: "Insights", to: "./" },
     { label: "Categories", to: "categories" },
     { label: "Products", to: "products" },
     { label: "Transactions", to: "transactions" },
@@ -19,9 +19,20 @@ interface storeHeaderProps {
 }
 
 function StoreHeader({ name, id }: storeHeaderProps) {
-    const [currentTab, setCurrentTab] = useState(0);
+    const [currentTab, setCurrentTab] = useState(() => {
+        const locations = window.location.pathname.split("/");
+        return !["/", ""].includes(locations.at(-1) as string) ? locations.at(-1) : "./";
+    });
     const tabComponents = storeHeaderNavValues.map((s) => {
-        return <Tab {...s} iconPosition="start" key={s.label + s.to} component={Link} />;
+        return (
+            <Tab
+                {...s}
+                iconPosition="start"
+                key={s.label + s.to}
+                component={NavLink}
+                value={s.to}
+            />
+        );
     });
 
     return (
