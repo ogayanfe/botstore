@@ -96,11 +96,11 @@ async function newAccessTokens(refresh: string): Promise<AuthTokenType | null> {
     // whoever gets here while a request for new tokens as to wait for the result
     while (refreshingToken) {
         // using a while loop without waiting a few seconds doesn't work
-        // using a promise here as an artificial timer
+        // using a promise here for timer effect
         await new Promise((r) => {
             setTimeout(() => {
                 r(null);
-            }, 10);
+            }, 50);
         });
 
         if (!refreshingToken) {

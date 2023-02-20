@@ -53,7 +53,6 @@ class Product(models.Model):
     thumbnail = models.ImageField(upload_to="images/products", blank=False)
     stock_amount = models.IntegerField()
     weight = models.IntegerField(null=True)
-    wait_time = models.DurationField(null=True, default=None)
     is_public = models.BooleanField(default=True)
 
     def __str__(self):
