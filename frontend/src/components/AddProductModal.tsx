@@ -19,12 +19,33 @@ import {
 import { CategoryType } from "../pages/dashboard/storedetails/categories";
 import { Form } from "react-router-dom";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 
 function FileField() {
+    interface fileType {
+        name: string;
+        sizeKb: number;
+    }
     const inputRef = useRef<HTMLInputElement | null>(null);
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {}
+    const [fileInfo, setFileInfo] = useState<null | fileType>(null);
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        const file = e.target;
 
+        if (file.files) {
+            const fi = file.files[0];
+            if (!fi) {
+                return;
+            }
+            setFileInfo({
+                name: fi.name,
+                sizeKb: fi.size / 1024,
+            });
+            return;
+        }
+        setFileInfo(null);
+    }
+
+    const fileToLarge = !fileInfo ? false : fileInfo.sizeKb >= 2;
     return (
         <div>
             <input
@@ -33,10 +54,22 @@ function FileField() {
                 name="image"
                 className="fixed left-[-100000px]"
                 ref={inputRef}
+                required
+                onChange={handleChange}
             />
             <Stack direction="row" spacing={1}>
-                <div className="flex-grow bg-gray-100 text-md dark:bg-gray-900 pl-4 p-1 rounded-md">
-                    You have not selected any file
+                <div
+                    className={`flex-grow bg-gray-100 capitalize text-md dark:bg-black pl-4 p-1 rounded-md ${
+                        fileToLarge && "text-red-500"
+                    }`}
+                >
+                    {fileInfo
+                        ? fileToLarge
+                            ? `${fileInfo.name} (${
+                                  Math.round(fileInfo.sizeKb * 100) / 100
+                              } kb, to large)`
+                            : fileInfo.name
+                        : "No file chosen"}
                 </div>
                 <Button
                     color="primary"
@@ -44,7 +77,7 @@ function FileField() {
                     endIcon={<FileUploadRoundedIcon />}
                     onClick={() => inputRef.current?.click()}
                 >
-                    Choose Image
+                    Image
                 </Button>
             </Stack>
         </div>
@@ -197,7 +230,9 @@ const ProductCreateUpdateModal = ({
                     <FileField />
                 </DialogContent>
                 <DialogActions>
-                    <Button color="error">Cancel</Button>
+                    <Button color="error" onClick={onClose}>
+                        Cancel
+                    </Button>
                     <Button type="submit" color="info">
                         Save
                     </Button>
