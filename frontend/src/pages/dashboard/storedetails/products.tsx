@@ -1,5 +1,12 @@
 import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import { Form, LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom";
+import {
+    ActionFunctionArgs,
+    Form,
+    LoaderFunctionArgs,
+    useLoaderData,
+    useNavigation,
+    useParams,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
@@ -36,19 +43,24 @@ interface AddProductProps {
 function AddProduct({ open, close, categories, currentCategory }: AddProductProps) {
     const [formValues, setFormValues] = useState({
         name: "",
-        description: "",
         stock_amount: "",
         is_public: true,
         price: "",
         weight: "",
         category: currentCategory,
+        thumbnail: null,
     });
-    function updateFormValues(e: React.ChangeEvent<HTMLInputElement>) {
-        console.log(e.target.name, e.target.value);
+
+    function updateFormValues(event: React.ChangeEvent<HTMLInputElement>) {
+        const { name, value, type } = event.target;
+        const newValue = type === "file" ? (event.target as HTMLInputElement).files?.[0] : value;
+
         setFormValues((prev) => {
-            return { ...prev, [e.target.name]: e.target.value };
+            return { ...prev, [name]: newValue };
         });
+        console.log(name, value, type, newValue);
     }
+
     return (
         <ProductCreateUpdateModal
             open={open}
@@ -65,13 +77,26 @@ function Header(props: HeaderPropsType) {
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const { storeId } = useParams();
     const [showAddDialog, setShowAddDialog] = useState(false);
+    const navigation = useNavigation();
 
     useEffect(() => {
         const apiClient = getApiClient();
-        apiClient.get(`/api/store/${storeId}/categories/`).then((response) => {
-            setCategories(response.data);
-        });
-    }, [getApiClient]);
+        apiClient
+            .get(`/api/store/${storeId}/categories/`)
+            .then((response) => {
+                setCategories(response.data);
+            })
+            .catch(() => alert("Couldn't load categories"));
+    }, [storeId]);
+
+    useEffect(() => {
+        // hiding the dialog box whenever we are loading the page
+        // need to do this so i can hide dialog whenever a form has been
+        // submitted
+        if (navigation.state === "loading") {
+            setShowAddDialog(false);
+        }
+    }, [navigation]);
 
     return (
         <nav className="flex justify-end px-8 p-6">
@@ -122,7 +147,7 @@ function Header(props: HeaderPropsType) {
                     open={showAddDialog}
                     close={() => setShowAddDialog(false)}
                     categories={categories}
-                    currentCategory={currentCategory == "All" ? "" : currentCategory}
+                    currentCategory={currentCategory === "All" ? "" : currentCategory}
                 />
             )}
         </nav>
@@ -145,3 +170,22 @@ function dashboardStoreProductsLoader({ params }: LoaderFunctionArgs) {
 }
 
 export { dashboardStoreProductsLoader };
+
+export async function productAction({ request, params }: ActionFunctionArgs) {
+    const formData = await request.formData();
+    const storeId = params.storeId;
+    const apiClient = getApiClient();
+    const catId = formData.get("category");
+
+    const url = `/api/store/${storeId}/cat/${catId}/createproduct/`;
+    try {
+        await apiClient.post(url, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+    } catch (e) {
+        return e;
+    }
+    return null;
+}

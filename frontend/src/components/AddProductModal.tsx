@@ -17,45 +17,42 @@ import {
     MenuItem,
 } from "@mui/material";
 import { CategoryType } from "../pages/dashboard/storedetails/categories";
-import { Form } from "react-router-dom";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef } from "react";
+import { Form } from "react-router-dom";
 
-function FileField() {
-    interface fileType {
+interface FileFieldProps {
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    file: null | File;
+}
+
+function FileField({ onChange, file }: FileFieldProps) {
+    interface fileInfoType {
         name: string;
         sizeKb: number;
     }
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [fileInfo, setFileInfo] = useState<null | fileType>(null);
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        const file = e.target;
-
-        if (file.files) {
-            const fi = file.files[0];
-            if (!fi) {
-                return;
-            }
-            setFileInfo({
-                name: fi.name,
-                sizeKb: fi.size / 1024,
-            });
-            return;
+    const fileInfo: null | fileInfoType = (() => {
+        if (!file) {
+            return null;
         }
-        setFileInfo(null);
-    }
+        return {
+            name: file.name,
+            sizeKb: file.size / 1024,
+        };
+    })();
 
-    const fileToLarge = !fileInfo ? false : fileInfo.sizeKb >= 2;
+    const fileToLarge = !fileInfo ? false : fileInfo.sizeKb >= 200;
     return (
         <div>
             <input
                 type="file"
                 accept="image/*"
-                name="image"
+                name="thumbnail"
                 className="fixed left-[-100000px]"
                 ref={inputRef}
                 required
-                onChange={handleChange}
+                onChange={onChange}
             />
             <Stack direction="row" spacing={1}>
                 <div
@@ -88,12 +85,12 @@ interface AddProductModalProps {
     formValues: {
         is_public: boolean;
         name: string;
-        description: string;
         stock_amount: string;
         price: string;
         weight: string;
         image_url?: string;
         category: string;
+        thumbnail: File | null;
     };
     categories: CategoryType[];
     onClose: () => void;
@@ -118,7 +115,7 @@ const ProductCreateUpdateModal = ({
                 },
             }}
         >
-            <Form method="post">
+            <Form method="post" encType="multipart/form-data">
                 <DialogTitle sx={{ textAlign: "center" }}>Add Product</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Add a new product</DialogContentText>
@@ -133,20 +130,6 @@ const ProductCreateUpdateModal = ({
                             fullWidth
                             onChange={updateFormValues}
                             value={formValues.name}
-                        />
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label="Description"
-                            required
-                            name="description"
-                            type="text"
-                            fullWidth
-                            inputProps={{
-                                max: 128,
-                            }}
-                            onChange={updateFormValues}
-                            value={formValues.description}
                         />
                         <Stack direction="row" spacing={2}>
                             <TextField
@@ -217,7 +200,7 @@ const ProductCreateUpdateModal = ({
                                     value={formValues.weight}
                                 />
                                 <FormHelperText id="outlined-weight-helper-text">
-                                    Weight
+                                    Weight (optional)
                                 </FormHelperText>
                             </FormControl>
                         </Stack>
@@ -227,7 +210,7 @@ const ProductCreateUpdateModal = ({
                             name="is_public"
                         />
                     </Stack>
-                    <FileField />
+                    <FileField onChange={updateFormValues} file={formValues.thumbnail} />
                 </DialogContent>
                 <DialogActions>
                     <Button color="error" onClick={onClose}>

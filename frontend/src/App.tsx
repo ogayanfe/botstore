@@ -22,6 +22,7 @@ import ErrorPage from "./components/ErrorPage";
 import DashboardStoreInsights from "./pages/dashboard/storedetails/Insights";
 import DashboardStoreCategories from "./pages/dashboard/storedetails/categories";
 import DashboardStoreProducts, {
+    productAction,
     dashboardStoreProductsLoader,
 } from "./pages/dashboard/storedetails/products";
 import DashboardStoreTransactions from "./pages/dashboard/storedetails/transactions";
@@ -70,6 +71,7 @@ const route = createBrowserRouter(
                             path="products"
                             element={<DashboardStoreProducts />}
                             loader={dashboardStoreProductsLoader}
+                            action={productAction}
                         />
                         <Route path="transactions" element={<DashboardStoreTransactions />} />
                         <Route path="settings" element={<DashboardStoreSettings />} />
