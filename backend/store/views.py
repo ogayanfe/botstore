@@ -27,6 +27,7 @@ class StoreRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.StoreSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_url_kwarg = "store_id"
+    order_by = "-id"
 
     def get_queryset(self):
         user: User = self.request.user

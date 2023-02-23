@@ -40,7 +40,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
+    category = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Product
@@ -50,3 +50,6 @@ class ProductSerializer(serializers.ModelSerializer):
         category = self.context.get("category")
         validated_data["category"] = validated_data.get("category", category)
         return super().create(validated_data)
+
+    def get_category(self, product):
+        return product.category.name

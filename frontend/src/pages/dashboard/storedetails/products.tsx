@@ -1,4 +1,5 @@
-import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, Button, Chip, Avatar } from "@mui/material";
+import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import {
     ActionFunctionArgs,
     Form,
@@ -7,11 +8,95 @@ import {
     useNavigation,
     useParams,
 } from "react-router-dom";
+import ClearIcon from "@mui/icons-material/Clear";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
 import ProductCreateUpdateModal from "../../../components/AddProductModal";
+import { GridRenderCellParams } from "@mui/x-data-grid/models";
+
+const columns: GridColDef[] = [
+    { field: "id", headerName: "Product Id" },
+    { field: "name", headerName: "Name" },
+    {
+        field: "thumbnail",
+        headerName: "Image Thumbnail",
+        sortable: false,
+        filterable: false,
+        editable: false,
+        disableColumnMenu: true,
+        align: "center",
+        renderCell({ row }: GridRenderCellParams) {
+            return (
+                <Avatar
+                    variant="rounded"
+                    src={row.thumbnail}
+                    alt={row.name + " product thumbnail"}
+                    sx={{ width: "40px", height: "40px" }}
+                />
+            );
+        },
+    },
+    { field: "category", headerName: "Category" },
+    { field: "price", headerName: "Price" },
+    { field: "stock_amount", headerName: "Amount In Stock" },
+    { field: "weight", headerName: "Weight" },
+    {
+        field: "is_public",
+        headerName: "Public",
+        renderCell: ({ row }: GridRenderCellParams) => {
+            const isPubStr = row.is_public.toString();
+            return (
+                <Chip
+                    label={isPubStr[0].toUpperCase() + isPubStr.slice(1)}
+                    size="small"
+                    variant="outlined"
+                    color={row.is_public ? "success" : "secondary"}
+                ></Chip>
+            );
+        },
+    },
+    {
+        field: "update",
+        headerName: "Update",
+        sortable: false,
+        filterable: false,
+        editable: false,
+        disableColumnMenu: true,
+        renderCell({}: GridRenderCellParams) {
+            return (
+                <Chip
+                    label="update"
+                    size="small"
+                    color="info"
+                    onClick={console.log}
+                    variant="outlined"
+                />
+            );
+        },
+    },
+    {
+        field: "delete",
+        headerName: "Delete",
+        sortable: false,
+        filterable: false,
+        editable: false,
+        disableColumnMenu: true,
+        renderCell({}: GridRenderCellParams) {
+            return (
+                <Chip
+                    label="delete"
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                    icon={<ClearIcon />}
+                    onClick={console.log}
+                />
+            );
+        },
+    },
+];
 
 interface ProductType {
     id: number;
@@ -25,19 +110,29 @@ interface ProductType {
 
 interface HeaderPropsType {}
 
-function NoProducts() {
-    return (
-        <div>
-            <p>Nothing to show here</p>
-        </div>
-    );
-}
-
 interface AddProductProps {
     open: boolean;
     close: () => void;
     categories: CategoryType[];
     currentCategory: string;
+}
+
+function ProductList() {
+    const { data: productsList } = useLoaderData() as { data: ProductType[] };
+    console.log(productsList);
+    return (
+        <div className="h-max px-2 pb-10 w-full max-w-[1018px]">
+            <DataGrid
+                loading={productsList.length === 0}
+                autoHeight
+                rowHeight={60}
+                disableExtendRowFullWidth
+                columns={columns}
+                rows={productsList}
+                pageSize={10}
+            />
+        </div>
+    );
 }
 
 function AddProduct({ open, close, categories, currentCategory }: AddProductProps) {
@@ -99,7 +194,8 @@ function Header(props: HeaderPropsType) {
     }, [navigation]);
 
     return (
-        <nav className="flex justify-end px-8 p-6">
+        <nav className="flex justify-between px-8 p-6">
+            <h3 className="text-xl dark:text-gray-200">Products</h3>
             <div className="flex gap-4">
                 <FormControl
                     fullWidth
@@ -155,11 +251,12 @@ function Header(props: HeaderPropsType) {
 }
 
 export default function DashboardStoreProducts() {
-    const { data: productsList } = useLoaderData() as { data: ProductType[] };
-
     return (
         <div>
             <Header />
+            <div className="flex justify-center">
+                <ProductList />
+            </div>
         </div>
     );
 }
