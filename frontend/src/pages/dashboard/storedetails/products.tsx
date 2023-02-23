@@ -1,5 +1,5 @@
 import { FormControl, InputLabel, Select, MenuItem, Button, Chip, Avatar } from "@mui/material";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import {
     ActionFunctionArgs,
     Form,
@@ -17,14 +17,21 @@ import ProductCreateUpdateModal from "../../../components/AddProductModal";
 import { GridRenderCellParams } from "@mui/x-data-grid/models";
 
 const columns: GridColDef[] = [
-    { field: "id", headerName: "Product Id" },
-    { field: "name", headerName: "Name" },
+    {
+        field: "id",
+        headerName: "Product Id",
+        flex: 1,
+        minWidth: 100,
+    },
+    { field: "name", headerName: "Name", flex: 1, minWidth: 100 },
     {
         field: "thumbnail",
         headerName: "Image Thumbnail",
         sortable: false,
         filterable: false,
         editable: false,
+        minWidth: 100,
+        flex: 1,
         disableColumnMenu: true,
         align: "center",
         renderCell({ row }: GridRenderCellParams) {
@@ -38,12 +45,14 @@ const columns: GridColDef[] = [
             );
         },
     },
-    { field: "category", headerName: "Category" },
-    { field: "price", headerName: "Price" },
-    { field: "stock_amount", headerName: "Amount In Stock" },
-    { field: "weight", headerName: "Weight" },
+    { field: "category", headerName: "Category", flex: 1, minWidth: 100 },
+    { field: "price", headerName: "Price", flex: 1 },
+    { field: "stock_amount", headerName: "Amount In Stock", flex: 1, minWidth: 100 },
+    { field: "weight", headerName: "Weight", flex: 1, minWidth: 100 },
     {
         field: "is_public",
+        minWidth: 100,
+        flex: 1,
         headerName: "Public",
         renderCell: ({ row }: GridRenderCellParams) => {
             const isPubStr = row.is_public.toString();
@@ -62,9 +71,11 @@ const columns: GridColDef[] = [
         headerName: "Update",
         sortable: false,
         filterable: false,
+        flex: 1,
         editable: false,
+        minWidth: 100,
         disableColumnMenu: true,
-        renderCell({}: GridRenderCellParams) {
+        renderCell() {
             return (
                 <Chip
                     label="update"
@@ -82,8 +93,10 @@ const columns: GridColDef[] = [
         sortable: false,
         filterable: false,
         editable: false,
+        flex: 1,
+        minWidth: 100,
         disableColumnMenu: true,
-        renderCell({}: GridRenderCellParams) {
+        renderCell() {
             return (
                 <Chip
                     label="delete"
@@ -119,13 +132,12 @@ interface AddProductProps {
 
 function ProductList() {
     const { data: productsList } = useLoaderData() as { data: ProductType[] };
-    console.log(productsList);
     return (
-        <div className="h-max px-2 pb-10 w-full max-w-[1018px]">
+        <div className="px-2 md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
             <DataGrid
                 loading={productsList.length === 0}
-                autoHeight
                 rowHeight={60}
+                autoHeight
                 disableExtendRowFullWidth
                 columns={columns}
                 rows={productsList}
@@ -194,7 +206,7 @@ function Header(props: HeaderPropsType) {
     }, [navigation]);
 
     return (
-        <nav className="flex justify-between px-8 p-6">
+        <nav className="flex justify-between lg:px-8 p-6">
             <h3 className="text-xl dark:text-gray-200">Products</h3>
             <div className="flex gap-4">
                 <FormControl
@@ -252,9 +264,9 @@ function Header(props: HeaderPropsType) {
 
 export default function DashboardStoreProducts() {
     return (
-        <div>
+        <div className="h-full">
             <Header />
-            <div className="flex justify-center">
+            <div className="flex h-full justify-center">
                 <ProductList />
             </div>
         </div>
