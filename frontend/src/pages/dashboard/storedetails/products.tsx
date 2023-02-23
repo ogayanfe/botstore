@@ -15,6 +15,8 @@ import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
 import ProductCreateUpdateModal from "../../../components/AddProductModal";
 import { GridRenderCellParams } from "@mui/x-data-grid/models";
+import styled from "@emotion/styled";
+import { useThemeContext } from "../../../context/themeContext";
 
 const columns: GridColDef[] = [
     {
@@ -130,18 +132,47 @@ interface AddProductProps {
     currentCategory: string;
 }
 
+function getDataGrid(darkTheme: boolean) {
+    // I read this stack overflow article that helped to style this part
+    // https://stackoverflow.com/questions/66435092/material-ui-datagrid-sticky-header
+
+    return styled(DataGrid)(({ theme }) => {
+        return {
+            "& .MuiDataGrid-columnHeaders": {
+                position: "sticky",
+                // Replace background colour if necessary
+                backgroundColor: darkTheme ? "#141517" : "#eff6ff",
+                // Display header above grid data, but below any popups
+                zIndex: 800,
+                top: "73px",
+                paddingTop: "20px",
+                borderTop: "1px solid",
+                borderColor: darkTheme ? "#515151" : "#e0e0e0",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+                // Undo the margins that were added to push the rows below the previously fixed header
+                marginTop: "0 !important",
+            },
+            "& .MuiDataGrid-main": {
+                // Not sure why it is hidden by default, but it prevented the header from sticking
+                overflow: "visible",
+            },
+        };
+    });
+}
 function ProductList() {
     const { data: productsList } = useLoaderData() as { data: ProductType[] };
+    const { darkTheme } = useThemeContext();
+    const StickyDataGrid = getDataGrid(darkTheme);
     return (
-        <div className="px-2 md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
-            <DataGrid
+        <div className="px-2 h-full md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
+            <StickyDataGrid
                 loading={productsList.length === 0}
                 rowHeight={60}
                 autoHeight
                 disableExtendRowFullWidth
                 columns={columns}
                 rows={productsList}
-                pageSize={10}
             />
         </div>
     );
