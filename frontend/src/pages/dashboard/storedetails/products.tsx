@@ -1,8 +1,7 @@
-import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import {
     ActionFunctionArgs,
-    Form,
     LoaderFunctionArgs,
     useLoaderData,
     useNavigation,
@@ -13,9 +12,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
 import ProductCreateUpdateModal from "../../../components/AddProductModal";
-import styled from "@emotion/styled";
-import { useThemeContext } from "../../../context/themeContext";
 import { getGridCols } from "./utils";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface ProductType {
     id: number;
@@ -36,63 +34,29 @@ interface AddProductProps {
     currentCategory: string;
 }
 
-function getDataGrid(darkTheme: boolean, width: number) {
-    // I read this stack overflow article that helped to style this part
-    // https://stackoverflow.com/questions/66435092/material-ui-datagrid-sticky-header
-
-    return styled(DataGrid)(({ theme }) => {
-        return {
-            "& .MuiDataGrid-columnHeaders": {
-                position: "sticky",
-                // Replace background colour if necessary
-                backgroundColor: darkTheme ? "#141517" : "#f9fafb",
-                // Display header above grid data, but below any popups
-                zIndex: 800,
-                top: width >= 1024 ? "73px" : "121px",
-                paddingTop: "10px",
-                borderTop: "1px solid",
-                borderColor: darkTheme ? "#515151" : "#e0e0e0",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-                // Undo the margins that were added to push the rows below the previously fixed header
-                marginTop: "0 !important",
-            },
-            "& .MuiDataGrid-main": {
-                // Not sure why it is hidden by default, but it prevented the header from sticking
-                overflow: "visible",
-            },
-        };
-    });
-}
+const NoProductOverlay: React.FC = () => {
+    return (
+        <div className="w-full h-full text-xl flex gap-6 flex-col items-center justify-center">
+            <span className="scale-[1.5]">
+                <SearchIcon />
+            </span>
+            <h3>You not created any products</h3>
+        </div>
+    );
+};
 
 function ProductList() {
     const { data: productsList } = useLoaderData() as { data: ProductType[] };
-    const { darkTheme } = useThemeContext();
-    const [width, setWidth] = useState(window.innerWidth);
-    const StickyDataGrid = getDataGrid(darkTheme, width);
-
-    useEffect(() => {
-        let widthTimeout: ReturnType<typeof setTimeout>;
-
-        const setSize = () => {
-            clearTimeout(widthTimeout);
-            widthTimeout = setTimeout(() => {
-                setWidth(window.innerWidth);
-            }, 50);
-        };
-
-        window.addEventListener("resize", setSize);
-        return () => {
-            window.removeEventListener("resize", setSize);
-        };
-    }, []);
 
     const columns = getGridCols(console.log);
     return (
-        <div className="px-2 h-full md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
-            <StickyDataGrid
-                loading={productsList.length === 0}
+        <div className="px-2 md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
+            <DataGrid
                 rowHeight={60}
+                components={{
+                    Toolbar: GridToolbar,
+                    NoRowsOverlay: NoProductOverlay,
+                }}
                 autoHeight
                 disableExtendRowFullWidth
                 columns={columns}
@@ -161,50 +125,19 @@ function Header(props: HeaderPropsType) {
     }, [navigation]);
 
     return (
-        <nav className="flex justify-between lg:px-8 p-6">
-            <h3 className="text-xl dark:text-gray-200">Products</h3>
-            <div className="flex gap-4">
-                <FormControl
-                    fullWidth
-                    component={Form}
-                    size="small"
-                    id="select-category-form"
-                    sx={{ width: "112px" }}
-                >
-                    <InputLabel id="select-category-label">Category</InputLabel>
-                    <Select
-                        labelId="select-category-label"
-                        id="select-category"
-                        label="category"
-                        name="category"
-                        onChange={(e) => {
-                            setCurrentCategory(e.target.value);
-                        }}
-                        sx={{ minWidth: "5rem" }}
-                        value={currentCategory}
-                    >
-                        <MenuItem value="All">All</MenuItem>
-                        {categories.map((c) => {
-                            return (
-                                <MenuItem value={c.name} key={c.id}>
-                                    {c.name}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                </FormControl>
-                <Button
-                    endIcon={<AddIcon />}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    onClick={() => {
-                        setShowAddDialog((p) => !p);
-                    }}
-                >
-                    Add
-                </Button>
-            </div>
+        <nav className="flex gap-4 justify-between lg:px-10 p-6">
+            <h3 className="text-xl dark:text-gray-200">All Products</h3>
+            <Button
+                endIcon={<AddIcon />}
+                variant="outlined"
+                color="primary"
+                size="large"
+                onClick={() => {
+                    setShowAddDialog((p) => !p);
+                }}
+            >
+                Add
+            </Button>
             {showAddDialog && (
                 <AddProduct
                     open={showAddDialog}
