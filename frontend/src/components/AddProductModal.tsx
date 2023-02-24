@@ -20,6 +20,7 @@ import { CategoryType } from "../pages/dashboard/storedetails/categories";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import { ChangeEvent, useRef } from "react";
 import { Form } from "react-router-dom";
+import { useThemeContext } from "../context/themeContext";
 
 interface FileFieldProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -105,13 +106,15 @@ const ProductCreateUpdateModal = ({
     updateFormValues,
     categories,
 }: AddProductModalProps) => {
+    const { darkTheme } = useThemeContext();
+
     return (
         <Dialog
             open={open}
             onClose={onClose}
             PaperProps={{
                 style: {
-                    background: "#0f0f12",
+                    background: darkTheme ? "#0f0f12" : "",
                 },
             }}
         >

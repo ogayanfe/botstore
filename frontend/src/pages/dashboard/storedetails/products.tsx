@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, Select, MenuItem, Button, Chip, Avatar } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import {
     ActionFunctionArgs,
     Form,
@@ -8,13 +8,11 @@ import {
     useNavigation,
     useParams,
 } from "react-router-dom";
-import ClearIcon from "@mui/icons-material/Clear";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
 import ProductCreateUpdateModal from "../../../components/AddProductModal";
-import { GridRenderCellParams } from "@mui/x-data-grid/models";
 import styled from "@emotion/styled";
 import { useThemeContext } from "../../../context/themeContext";
 import { getGridCols } from "./utils";
@@ -47,7 +45,7 @@ function getDataGrid(darkTheme: boolean, width: number) {
             "& .MuiDataGrid-columnHeaders": {
                 position: "sticky",
                 // Replace background colour if necessary
-                backgroundColor: darkTheme ? "#141517" : "#eff6ff",
+                backgroundColor: darkTheme ? "#141517" : "#f9fafb",
                 // Display header above grid data, but below any popups
                 zIndex: 800,
                 top: width >= 1024 ? "73px" : "121px",
@@ -235,8 +233,6 @@ function dashboardStoreProductsLoader({ params }: LoaderFunctionArgs) {
     return apiClient.get(`api/store/${params.storeId}/products/`);
 }
 
-export { dashboardStoreProductsLoader };
-
 export async function productAction({ request, params }: ActionFunctionArgs) {
     const formData = await request.formData();
     const storeId = params.storeId;
@@ -255,3 +251,5 @@ export async function productAction({ request, params }: ActionFunctionArgs) {
     }
     return null;
 }
+
+export { dashboardStoreProductsLoader };

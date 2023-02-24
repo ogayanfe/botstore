@@ -57,7 +57,7 @@ function DashboardStoreDetail() {
     }, [setHeaderText, data.name]);
     return (
         <div className="h-full flex flex-col">
-            <div className=" bg-blue-50 pb-2 dark:bg-[#141517] z-[1000] sticky top-0 flex justify-center">
+            <div className=" bg-gray-50 pb-2 dark:bg-[#141517] z-[1000] sticky top-0 flex justify-center">
                 <StoreHeader id={data.id} name={data.name} />
             </div>
             <div>

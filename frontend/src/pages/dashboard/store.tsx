@@ -77,7 +77,7 @@ function DashboardStore() {
     }, [setHeaderText]);
     return (
         <div className="p-2 pt-6 bg-inherit h-full">
-            <div className="sticky top-0 bg-blue-50 dark:bg-[#141517]">
+            <div className="sticky top-0 bg-gray-50 dark:bg-[#141517]">
                 <StoreHeader />
             </div>
             {data.length === 0 ? (
