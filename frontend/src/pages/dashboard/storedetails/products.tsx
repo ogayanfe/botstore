@@ -132,7 +132,7 @@ interface AddProductProps {
     currentCategory: string;
 }
 
-function getDataGrid(darkTheme: boolean) {
+function getDataGrid(darkTheme: boolean, width: number) {
     // I read this stack overflow article that helped to style this part
     // https://stackoverflow.com/questions/66435092/material-ui-datagrid-sticky-header
 
@@ -144,8 +144,8 @@ function getDataGrid(darkTheme: boolean) {
                 backgroundColor: darkTheme ? "#141517" : "#eff6ff",
                 // Display header above grid data, but below any popups
                 zIndex: 800,
-                top: "73px",
-                paddingTop: "20px",
+                top: width >= 1024 ? "73px" : "121px",
+                paddingTop: "10px",
                 borderTop: "1px solid",
                 borderColor: darkTheme ? "#515151" : "#e0e0e0",
             },
@@ -163,7 +163,25 @@ function getDataGrid(darkTheme: boolean) {
 function ProductList() {
     const { data: productsList } = useLoaderData() as { data: ProductType[] };
     const { darkTheme } = useThemeContext();
-    const StickyDataGrid = getDataGrid(darkTheme);
+    const [width, setWidth] = useState(window.innerWidth);
+    const StickyDataGrid = getDataGrid(darkTheme, width);
+
+    useEffect(() => {
+        let widthTimeout: ReturnType<typeof setTimeout>;
+
+        const setSize = () => {
+            clearTimeout(widthTimeout);
+            widthTimeout = setTimeout(() => {
+                setWidth(window.innerWidth);
+            }, 50);
+        };
+
+        window.addEventListener("resize", setSize);
+        return () => {
+            window.removeEventListener("resize", setSize);
+        };
+    }, []);
+
     return (
         <div className="px-2 h-full md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
             <StickyDataGrid
