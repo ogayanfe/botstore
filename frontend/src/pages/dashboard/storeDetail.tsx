@@ -56,7 +56,7 @@ function DashboardStoreDetail() {
         document.title = "Store Details | " + data.name;
     }, [setHeaderText, data.name]);
     return (
-        <div className="h-full flex flex-col">
+        <div className="flex flex-col h-fit">
             <div className=" bg-gray-50 pb-2 dark:bg-[#141517] z-[1000] sticky top-0 flex justify-center">
                 <StoreHeader id={data.id} name={data.name} />
             </div>
