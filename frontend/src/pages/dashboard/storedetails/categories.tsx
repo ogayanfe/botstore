@@ -1,12 +1,16 @@
 import { Button } from "@mui/material";
 import CategoryIcon from "@mui/icons-material/Category";
 import AddIcon from "@mui/icons-material/Add";
+import { getApiClient } from "../../../utils/authutils";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+
 interface CategoryType {
     id: number;
     name: string;
     created: string;
     description: string;
     thumbnail: string;
+    product_count: number;
 }
 
 function CategoryHeader() {
@@ -25,6 +29,8 @@ function CategoryHeader() {
 }
 
 export default function DashboardStoreCategories() {
+    const { data: categories } = useLoaderData() as { data: CategoryType[] };
+    console.log(categories);
     return (
         <>
             <CategoryHeader />
@@ -33,3 +39,9 @@ export default function DashboardStoreCategories() {
 }
 
 export type { CategoryType };
+
+export async function storeCategoriesLoader({ params }: LoaderFunctionArgs) {
+    const { storeId } = params;
+    const apiClient = getApiClient();
+    return apiClient.get(`api/store/${storeId}/categories/`);
+}

@@ -20,7 +20,9 @@ import DashboardStore, { dashboardStoreLoader } from "./pages/dashboard/store";
 import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/dashboard/storeDetail";
 import ErrorPage from "./components/ErrorPage";
 import DashboardStoreInsights from "./pages/dashboard/storedetails/Insights";
-import DashboardStoreCategories from "./pages/dashboard/storedetails/categories";
+import DashboardStoreCategories, {
+    storeCategoriesLoader,
+} from "./pages/dashboard/storedetails/categories";
 import DashboardStoreProducts, {
     productAction,
     dashboardStoreProductsLoader,
@@ -66,7 +68,11 @@ const route = createBrowserRouter(
                         loader={dashboardStoreDetailLoader}
                     >
                         <Route path="insights" element={<DashboardStoreInsights />} />
-                        <Route path="categories" element={<DashboardStoreCategories />} />
+                        <Route
+                            path="categories"
+                            element={<DashboardStoreCategories />}
+                            loader={storeCategoriesLoader}
+                        />
                         <Route
                             path="products"
                             element={<DashboardStoreProducts />}

@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
 import ProductCreateUpdateModal from "../../../components/AddProductModal";
-import { getGridCols } from "./utils";
+import { getProductGridCols } from "./utils";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface ProductType {
@@ -47,7 +47,7 @@ const NoProductOverlay: React.FC = () => {
 function ProductList() {
     const { data: productsList } = useLoaderData() as { data: ProductType[] };
 
-    const columns = getGridCols(console.log);
+    const columns = getProductGridCols(console.log);
     return (
         <div className="px-2 md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
             <DataGrid
