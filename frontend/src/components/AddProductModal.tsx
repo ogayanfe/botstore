@@ -2,7 +2,6 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogContentText,
     Stack,
     DialogActions,
     TextField,
@@ -121,7 +120,6 @@ const ProductCreateUpdateModal = ({
             <Form method="post" encType="multipart/form-data">
                 <DialogTitle sx={{ textAlign: "center" }}>Add Product</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Add a new product</DialogContentText>
                     <Stack spacing={3}>
                         <TextField
                             autoFocus

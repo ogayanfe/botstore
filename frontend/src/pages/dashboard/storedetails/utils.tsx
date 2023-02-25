@@ -5,7 +5,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 type UpdateRowType = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, row: Object) => void;
 
-export function getGridCols(update: UpdateRowType): GridColDef[] {
+export function getProductGridCols(update: UpdateRowType): GridColDef[] {
     return [
         {
             field: "id",
@@ -137,4 +137,8 @@ export function getGridCols(update: UpdateRowType): GridColDef[] {
             },
         },
     ];
+}
+
+export function getCategoriesGridCols(update: UpdateRowType): GridColDef[] {
+    return [];
 }
