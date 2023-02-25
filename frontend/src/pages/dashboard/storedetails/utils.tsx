@@ -1,6 +1,6 @@
-import { GridRenderCellParams } from "@mui/x-data-grid/models";
+import { GridRenderCellParams, GridRenderEditCellParams } from "@mui/x-data-grid/models";
 import { GridColDef } from "@mui/x-data-grid";
-import { Chip, Avatar } from "@mui/material";
+import { Chip, Avatar, TextField } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 type UpdateRowType = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, row: Object) => void;
@@ -13,7 +13,14 @@ export function getGridCols(update: UpdateRowType): GridColDef[] {
             flex: 1,
             minWidth: 100,
         },
-        { field: "name", headerName: "Name", flex: 1, minWidth: 100 },
+        {
+            field: "name",
+            resizable: true,
+            headerName: "Name",
+            flex: 1,
+            minWidth: 100,
+            editable: true,
+        },
         {
             field: "thumbnail",
             headerName: "Image Thumbnail",
@@ -36,9 +43,36 @@ export function getGridCols(update: UpdateRowType): GridColDef[] {
             },
         },
         { field: "category", headerName: "Category", flex: 1, minWidth: 100 },
-        { field: "price", headerName: "Price", flex: 1 },
-        { field: "stock_amount", headerName: "Amount In Stock", flex: 1, minWidth: 100 },
-        { field: "weight", headerName: "Weight", flex: 1, minWidth: 100 },
+        {
+            field: "price",
+            headerName: "Price",
+            flex: 1,
+            editable: true,
+
+            renderEditCell() {
+                return <TextField type="number" inputProps={{ min: 0 }} />;
+            },
+        },
+        {
+            field: "stock_amount",
+            headerName: "Amount In Stock",
+            flex: 1,
+            minWidth: 100,
+            editable: true,
+            renderEditCell() {
+                return <TextField type="number" inputProps={{ min: 0 }} />;
+            },
+        },
+        {
+            field: "weight",
+            headerName: "Weight",
+            flex: 1,
+            minWidth: 100,
+            editable: true,
+            renderEditCell() {
+                return <TextField type="number" inputProps={{ min: 0 }} />;
+            },
+        },
         {
             field: "is_public",
             minWidth: 100,

@@ -31,7 +31,6 @@ interface AddProductProps {
     open: boolean;
     close: () => void;
     categories: CategoryType[];
-    currentCategory: string;
 }
 
 const NoProductOverlay: React.FC = () => {
@@ -66,14 +65,14 @@ function ProductList() {
     );
 }
 
-function AddProduct({ open, close, categories, currentCategory }: AddProductProps) {
+function AddProduct({ open, close, categories }: AddProductProps) {
     const [formValues, setFormValues] = useState({
         name: "",
         stock_amount: "",
         is_public: true,
         price: "",
         weight: "",
-        category: currentCategory,
+        category: "",
         thumbnail: null,
     });
 
@@ -99,7 +98,6 @@ function AddProduct({ open, close, categories, currentCategory }: AddProductProp
 }
 
 function Header(props: HeaderPropsType) {
-    const [currentCategory, setCurrentCategory] = useState("All");
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const { storeId } = useParams();
     const [showAddDialog, setShowAddDialog] = useState(false);
@@ -137,13 +135,13 @@ function Header(props: HeaderPropsType) {
                 }}
             >
                 Add
+                <span className="fixed -left-[5000000px]">product</span>
             </Button>
             {showAddDialog && (
                 <AddProduct
                     open={showAddDialog}
                     close={() => setShowAddDialog(false)}
                     categories={categories}
-                    currentCategory={currentCategory === "All" ? "" : currentCategory}
                 />
             )}
         </nav>
