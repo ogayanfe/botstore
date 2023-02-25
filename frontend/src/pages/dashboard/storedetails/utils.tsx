@@ -1,4 +1,8 @@
-import { GridRenderCellParams, GridRenderEditCellParams } from "@mui/x-data-grid/models";
+import {
+    GridRenderCellParams,
+    GridRenderEditCellParams,
+    GridValueGetterParams,
+} from "@mui/x-data-grid/models";
 import { GridColDef } from "@mui/x-data-grid";
 import { Chip, Avatar, TextField } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -16,7 +20,7 @@ export function getProductGridCols(update: UpdateRowType): GridColDef[] {
         {
             field: "name",
             headerName: "Name",
-            flex: 1,
+            flex: 1.5,
             minWidth: 100,
             editable: true,
         },
@@ -41,7 +45,7 @@ export function getProductGridCols(update: UpdateRowType): GridColDef[] {
                 );
             },
         },
-        { field: "category", headerName: "Category", flex: 1, minWidth: 100 },
+        { field: "category", headerName: "Category", flex: 1.5, minWidth: 100 },
         {
             field: "price",
             headerName: "Price",
@@ -96,6 +100,8 @@ export function getProductGridCols(update: UpdateRowType): GridColDef[] {
             filterable: false,
             flex: 1,
             editable: false,
+            headerAlign: "center",
+            align: "center",
             minWidth: 100,
             disableColumnMenu: true,
             renderCell({ row }: GridRenderCellParams) {
@@ -122,6 +128,8 @@ export function getProductGridCols(update: UpdateRowType): GridColDef[] {
             flex: 1,
             minWidth: 100,
             disableColumnMenu: true,
+            headerAlign: "center",
+            align: "center",
             renderCell() {
                 return (
                     <Chip
@@ -139,5 +147,101 @@ export function getProductGridCols(update: UpdateRowType): GridColDef[] {
 }
 
 export function getCategoriesGridCols(update: UpdateRowType): GridColDef[] {
-    return [];
+    return [
+        {
+            field: "id",
+            align: "center",
+            headerName: "Category Id",
+            flex: 1,
+            minWidth: 100,
+        },
+        {
+            field: "thumbnail",
+            headerName: "Thumbnail",
+            sortable: false,
+            filterable: false,
+            editable: false,
+            minWidth: 100,
+            flex: 1,
+            disableColumnMenu: true,
+            align: "center",
+            renderCell({ row }: GridRenderCellParams) {
+                return (
+                    <Avatar
+                        variant="rounded"
+                        src={row.thumbnail}
+                        alt={row.name + " row thumbnail"}
+                        sx={{ width: "40px", height: "40px" }}
+                    />
+                );
+            },
+        },
+        {
+            field: "description",
+            headerName: "Category Description",
+            flex: 2,
+            minWidth: 200,
+            editable: true,
+        },
+        {
+            field: "created",
+            headerName: "Created",
+            flex: 1,
+            minWidth: 200,
+            valueGetter({ row }: GridValueGetterParams) {
+                return new Date(row.created);
+            },
+        },
+
+        {
+            field: "update",
+            headerName: "Update",
+            sortable: false,
+            filterable: false,
+            headerAlign: "center",
+            align: "center",
+            flex: 1,
+            editable: false,
+            minWidth: 100,
+            disableColumnMenu: true,
+            renderCell({ row }: GridRenderCellParams) {
+                return (
+                    <Chip
+                        label="update"
+                        size="small"
+                        color="info"
+                        component="button"
+                        onClick={(e) => {
+                            update(e, row);
+                        }}
+                        variant="outlined"
+                    />
+                );
+            },
+        },
+        {
+            field: "delete",
+            headerName: "Delete",
+            sortable: false,
+            filterable: false,
+            editable: false,
+            flex: 1,
+            headerAlign: "center",
+            align: "center",
+            minWidth: 100,
+            disableColumnMenu: true,
+            renderCell() {
+                return (
+                    <Chip
+                        label="delete"
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        icon={<ClearIcon />}
+                        onClick={console.log}
+                    />
+                );
+            },
+        },
+    ];
 }

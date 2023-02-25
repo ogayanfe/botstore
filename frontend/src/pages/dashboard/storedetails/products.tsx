@@ -12,6 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import { CategoryType } from "./categories";
 import ProductCreateUpdateModal from "../../../components/AddProductModal";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { getProductGridCols } from "./utils";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -49,7 +50,7 @@ function ProductList() {
 
     const columns = getProductGridCols(console.log);
     return (
-        <div className="px-2 md:px-4 lg:px-8 pb-10 w-full max-w-[d1018px]">
+        <div className="px-2 md:px-4 lg:px-8 pb-10 w-full">
             <DataGrid
                 rowHeight={60}
                 components={{
@@ -124,7 +125,10 @@ function Header(props: HeaderPropsType) {
 
     return (
         <nav className="flex gap-4 justify-between lg:px-10 p-6">
-            <h3 className="text-xl dark:text-gray-200">All Products</h3>
+            <h3 className="text-xl flex gap-3 items-center dark:text-gray-200">
+                <ShoppingCartIcon />
+                <span>All Products</span>
+            </h3>
             <Button
                 endIcon={<AddIcon />}
                 variant="outlined"

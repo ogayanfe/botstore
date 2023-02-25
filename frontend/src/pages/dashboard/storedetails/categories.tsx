@@ -22,6 +22,8 @@ import {
 import { useThemeContext } from "../../../context/themeContext";
 import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { Stack } from "@mui/system";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { getCategoriesGridCols } from "./utils";
 
 interface CategoryType {
     id: number;
@@ -161,31 +163,46 @@ function AddCategoryDialog({ isOpen, close }: AddCategoryPropType) {
     );
 }
 
+function CategoryList() {
+    const { data: categories } = useLoaderData() as { data: CategoryType[] };
+    const columns = getCategoriesGridCols(console.log);
+    return (
+        <div className="px-2 md:px-4 lg:px-8 pb-10 w-full">
+            <DataGrid
+                autoHeight
+                rowHeight={60}
+                components={{
+                    Toolbar: GridToolbar,
+                }}
+                disableExtendRowFullWidth
+                columns={columns}
+                rows={categories}
+            ></DataGrid>
+        </div>
+    );
+}
+
 function CategoryHeader({ open }: CategoryHeaderPropType) {
     return (
-        <nav className="text-gray-900 dark:text-gray-300 mx-2 lg:mx-8">
-            <div className="flex items-center justify-between p-3">
-                <h3 className="font-semibold text-xl flex w-full items-center gap-3">
-                    <CategoryIcon aria-hidden />
-                    <span>Categories</span>
-                </h3>
-                <Button endIcon={<AddIcon />} variant="outlined" onClick={open} size="large">
-                    Add
-                    <span className="fixed -left-[5000000px]">category</span>
-                </Button>
-            </div>
-            <Divider />
+        <nav className="mx-2 lg:mx-7 p-3 flex items-center justify-between text-gray-900 dark:text-gray-300">
+            <h3 className="font-semibold text-xl flex w-full items-center gap-3">
+                <CategoryIcon aria-hidden />
+                <span>Categories</span>
+            </h3>
+            <Button endIcon={<AddIcon />} variant="outlined" onClick={open} size="large">
+                Add
+                <span className="fixed -left-[5000000px]">category</span>
+            </Button>
         </nav>
     );
 }
 
 export default function DashboardStoreCategories() {
-    const { data: categories } = useLoaderData() as { data: CategoryType[] };
     const [openDialog, setOpenDialog] = useState(false);
     const navigation = useNavigation();
 
     useEffect(() => {
-        if (navigation.state == "loading") {
+        if (navigation.state === "loading") {
             setOpenDialog(false);
         }
     }, [navigation]);
@@ -194,6 +211,7 @@ export default function DashboardStoreCategories() {
         <>
             <CategoryHeader open={() => setOpenDialog(true)} />
             <AddCategoryDialog isOpen={openDialog} close={() => setOpenDialog(false)} />
+            <CategoryList />
         </>
     );
 }
