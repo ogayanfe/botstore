@@ -12,9 +12,15 @@ import CategoryIcon from "@mui/icons-material/Category";
 import AddIcon from "@mui/icons-material/Add";
 import { getApiClient } from "../../../utils/authutils";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
-import { Form, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import {
+    ActionFunctionArgs,
+    Form,
+    LoaderFunctionArgs,
+    useLoaderData,
+    useNavigation,
+} from "react-router-dom";
 import { useThemeContext } from "../../../context/themeContext";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { Stack } from "@mui/system";
 
 interface CategoryType {
@@ -119,7 +125,7 @@ function AddCategoryDialog({ isOpen, close }: AddCategoryPropType) {
             }}
         >
             <DialogTitle sx={{ textAlign: "center" }}>Add Category</DialogTitle>
-            <Form className="w-full">
+            <Form className="w-full" method="post" encType="multipart/form-data">
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -133,9 +139,9 @@ function AddCategoryDialog({ isOpen, close }: AddCategoryPropType) {
                     <TextField
                         autoFocus
                         margin="normal"
-                        label="Name"
+                        label="Description"
                         required
-                        name="name"
+                        name="description"
                         type="text"
                         fullWidth
                     />
@@ -176,6 +182,14 @@ function CategoryHeader({ open }: CategoryHeaderPropType) {
 export default function DashboardStoreCategories() {
     const { data: categories } = useLoaderData() as { data: CategoryType[] };
     const [openDialog, setOpenDialog] = useState(false);
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        if (navigation.state == "loading") {
+            setOpenDialog(false);
+        }
+    }, [navigation]);
+
     return (
         <>
             <CategoryHeader open={() => setOpenDialog(true)} />
@@ -190,4 +204,16 @@ export async function storeCategoriesLoader({ params }: LoaderFunctionArgs) {
     const { storeId } = params;
     const apiClient = getApiClient();
     return apiClient.get(`api/store/${storeId}/categories/`);
+}
+
+export async function storeCategoriesAction({ params, request }: ActionFunctionArgs) {
+    const { storeId } = params;
+    const formData = await request.formData();
+    const apiClient = getApiClient();
+    const config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    };
+    return await apiClient.post(`/api/store/${storeId}/categories/`, formData, config);
 }

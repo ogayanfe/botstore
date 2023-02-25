@@ -15,7 +15,6 @@ export function getProductGridCols(update: UpdateRowType): GridColDef[] {
         },
         {
             field: "name",
-            resizable: true,
             headerName: "Name",
             flex: 1,
             minWidth: 100,

@@ -21,6 +21,7 @@ import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/dashbo
 import ErrorPage from "./components/ErrorPage";
 import DashboardStoreInsights from "./pages/dashboard/storedetails/Insights";
 import DashboardStoreCategories, {
+    storeCategoriesAction,
     storeCategoriesLoader,
 } from "./pages/dashboard/storedetails/categories";
 import DashboardStoreProducts, {
@@ -72,6 +73,7 @@ const route = createBrowserRouter(
                             path="categories"
                             element={<DashboardStoreCategories />}
                             loader={storeCategoriesLoader}
+                            action={storeCategoriesAction}
                         />
                         <Route
                             path="products"
