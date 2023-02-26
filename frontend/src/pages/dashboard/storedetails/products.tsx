@@ -34,6 +34,16 @@ interface AddProductProps {
     categories: CategoryType[];
 }
 
+interface FormValuesType {
+    name: string;
+    stock_amount: string;
+    is_public: boolean;
+    price: "";
+    weight: "";
+    category: "";
+    thumbnail: null | File;
+}
+
 const NoProductOverlay: React.FC = () => {
     return (
         <div className="w-full h-full text-xl flex gap-6 flex-col items-center justify-center">
@@ -67,14 +77,14 @@ function ProductList() {
 }
 
 function AddProduct({ open, close, categories }: AddProductProps) {
-    const [formValues, setFormValues] = useState({
+    const [formValues, setFormValues] = useState<FormValuesType>({
         name: "",
         stock_amount: "",
         is_public: true,
         price: "",
         weight: "",
         category: "",
-        thumbnail: null,
+        thumbnail: null, // type null or File
     });
 
     function updateFormValues(event: React.ChangeEvent<HTMLInputElement>) {
@@ -84,10 +94,11 @@ function AddProduct({ open, close, categories }: AddProductProps) {
         setFormValues((prev) => {
             return { ...prev, [name]: newValue };
         });
-        console.log(name, value, type, newValue);
     }
 
     function clearThumbnail() {
+        const remove = window.confirm(`Clear ${formValues.thumbnail?.name} from form?`);
+        if (!remove) return;
         setFormValues((prev) => ({ ...prev, thumbnail: null }));
     }
 

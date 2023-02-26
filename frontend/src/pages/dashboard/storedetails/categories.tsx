@@ -24,6 +24,7 @@ import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { Stack } from "@mui/system";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { getCategoriesGridCols } from "./utils";
+import ImagePreview from "../../../components/ImagePreviewComponent";
 
 interface CategoryType {
     id: number;
@@ -46,6 +47,7 @@ function FileField() {
     interface fileInfoType {
         name: string;
         sizeKb: number;
+        file: File;
     }
     const [fileInfo, setFileInfo] = useState<null | fileInfoType>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -63,6 +65,7 @@ function FileField() {
             setFileInfo({
                 name: fi.name,
                 sizeKb: fi.size / 1024,
+                file: fi,
             });
             return;
         }
@@ -71,6 +74,19 @@ function FileField() {
 
     return (
         <Stack spacing={1} sx={{ marginTop: "10px" }}>
+            {fileInfo && (
+                <ImagePreview
+                    file={URL.createObjectURL(fileInfo.file)}
+                    removeImage={() => {
+                        const remove = window.confirm(`Clear ${fileInfo.name} from form?`);
+                        if (!remove) return;
+                        setFileInfo(null);
+                        if (inputRef.current) {
+                            inputRef.current.value = "";
+                        }
+                    }}
+                />
+            )}
             <Typography
                 variant="button"
                 gutterBottom
@@ -116,6 +132,7 @@ function FileField() {
 
 function AddCategoryDialog({ isOpen, close }: AddCategoryPropType) {
     const { darkTheme } = useThemeContext();
+
     return (
         <Dialog
             open={isOpen}
