@@ -1,8 +1,4 @@
-import {
-    GridRenderCellParams,
-    GridRenderEditCellParams,
-    GridValueGetterParams,
-} from "@mui/x-data-grid/models";
+import { GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid/models";
 import { GridColDef } from "@mui/x-data-grid";
 import { Chip, Avatar, TextField } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -182,6 +178,13 @@ export function getCategoriesGridCols(update: UpdateRowType): GridColDef[] {
             flex: 2,
             minWidth: 200,
             editable: true,
+        },
+        {
+            field: "product_count",
+            align: "center",
+            headerName: "Number Of Products",
+            flex: 1,
+            minWidth: 100,
         },
         {
             field: "created",

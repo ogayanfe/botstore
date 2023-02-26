@@ -28,6 +28,7 @@ class StoreSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     # store = StoreSerializer(read_only=True)
     store = None
+    product_count = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Category
@@ -37,6 +38,9 @@ class CategorySerializer(serializers.ModelSerializer):
         store = self.context.get("store")
         validated_data["store"] = validated_data.get("store", store)
         return super().create(validated_data)
+
+    def get_product_count(self, obj: models.Category):
+        return models.Product.objects.filter(category=obj).count()
 
 
 class ProductSerializer(serializers.ModelSerializer):
