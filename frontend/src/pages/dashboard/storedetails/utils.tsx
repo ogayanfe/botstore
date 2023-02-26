@@ -152,6 +152,12 @@ export function getCategoriesGridCols(update: UpdateRowType): GridColDef[] {
             minWidth: 100,
         },
         {
+            field: "name",
+            headerName: "Name",
+            flex: 1,
+            minWidth: 100,
+        },
+        {
             field: "thumbnail",
             headerName: "Thumbnail",
             sortable: false,
