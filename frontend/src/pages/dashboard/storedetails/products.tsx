@@ -87,6 +87,10 @@ function AddProduct({ open, close, categories }: AddProductProps) {
         console.log(name, value, type, newValue);
     }
 
+    function clearThumbnail() {
+        setFormValues((prev) => ({ ...prev, thumbnail: null }));
+    }
+
     return (
         <ProductCreateUpdateModal
             open={open}
@@ -94,6 +98,7 @@ function AddProduct({ open, close, categories }: AddProductProps) {
             updateFormValues={updateFormValues}
             onClose={close}
             categories={categories}
+            clearFile={clearThumbnail}
         />
     );
 }

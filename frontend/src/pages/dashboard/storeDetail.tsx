@@ -24,15 +24,7 @@ function StoreHeader({ name, id }: storeHeaderProps) {
         return !["/", ""].includes(locations.at(-1) as string) ? locations.at(-1) : "./";
     });
     const tabComponents = storeHeaderNavValues.map((s) => {
-        return (
-            <Tab
-                {...s}
-                iconPosition="start"
-                key={s.label + s.to}
-                component={NavLink}
-                value={s.to}
-            />
-        );
+        return <Tab {...s} key={s.label + s.to} component={NavLink} value={s.to} />;
     });
 
     return (

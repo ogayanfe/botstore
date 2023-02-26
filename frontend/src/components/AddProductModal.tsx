@@ -20,13 +20,15 @@ import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import { ChangeEvent, useRef } from "react";
 import { Form } from "react-router-dom";
 import { useThemeContext } from "../context/themeContext";
+import ImagePreview from "./ImagePreviewComponent";
 
 interface FileFieldProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     file: null | File;
+    clearFile: () => void;
 }
 
-function FileField({ onChange, file }: FileFieldProps) {
+function FileField({ onChange, file, clearFile }: FileFieldProps) {
     interface fileInfoType {
         name: string;
         sizeKb: number;
@@ -44,39 +46,42 @@ function FileField({ onChange, file }: FileFieldProps) {
 
     const fileToLarge = !fileInfo ? false : fileInfo.sizeKb >= 200;
     return (
-        <div>
-            <input
-                type="file"
-                accept="image/*"
-                name="thumbnail"
-                className="fixed left-[-100000px]"
-                ref={inputRef}
-                required
-                onChange={onChange}
-            />
-            <Stack direction="row" spacing={1}>
-                <div
-                    className={`flex-grow bg-gray-100 capitalize text-md dark:bg-black pl-4 p-1 rounded-md ${
-                        fileToLarge && "text-red-500"
-                    }`}
-                >
-                    {fileInfo
-                        ? fileToLarge
-                            ? `${fileInfo.name} (${
-                                  Math.round(fileInfo.sizeKb * 100) / 100
-                              } kb, to large)`
-                            : fileInfo.name
-                        : "No file chosen"}
-                </div>
-                <Button
-                    color="primary"
-                    variant="contained"
-                    endIcon={<FileUploadRoundedIcon />}
-                    onClick={() => inputRef.current?.click()}
-                >
-                    Image
-                </Button>
-            </Stack>
+        <div className="w-full flex flex-col gap-4">
+            {file && <ImagePreview file={URL.createObjectURL(file)} removeImage={clearFile} />}
+            <div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    name="thumbnail"
+                    className="fixed left-[-100000px]"
+                    ref={inputRef}
+                    required
+                    onChange={onChange}
+                />
+                <Stack direction="row" spacing={1}>
+                    <div
+                        className={`flex-grow bg-gray-100 capitalize text-md dark:bg-black pl-4 p-1 rounded-md ${
+                            fileToLarge && "text-red-500"
+                        }`}
+                    >
+                        {fileInfo
+                            ? fileToLarge
+                                ? `${fileInfo.name} (${
+                                      Math.round(fileInfo.sizeKb * 100) / 100
+                                  } kb, to large)`
+                                : fileInfo.name
+                            : "No file chosen"}
+                    </div>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        endIcon={<FileUploadRoundedIcon />}
+                        onClick={() => inputRef.current?.click()}
+                    >
+                        Image
+                    </Button>
+                </Stack>
+            </div>
         </div>
     );
 }
@@ -92,6 +97,7 @@ interface AddProductModalProps {
         category: string;
         thumbnail: File | null;
     };
+    clearFile: () => void;
     categories: CategoryType[];
     onClose: () => void;
     open: boolean;
@@ -104,6 +110,7 @@ const ProductCreateUpdateModal = ({
     open,
     updateFormValues,
     categories,
+    clearFile,
 }: AddProductModalProps) => {
     const { darkTheme } = useThemeContext();
 
@@ -211,7 +218,11 @@ const ProductCreateUpdateModal = ({
                             name="is_public"
                         />
                     </Stack>
-                    <FileField onChange={updateFormValues} file={formValues.thumbnail} />
+                    <FileField
+                        onChange={updateFormValues}
+                        file={formValues.thumbnail}
+                        clearFile={clearFile}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button color="error" onClick={onClose}>
