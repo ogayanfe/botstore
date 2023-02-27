@@ -11,7 +11,6 @@ interface StoreType {
     id: number;
     name: string;
     logo: string;
-    icon: string;
     moto: string;
     owner: UserType;
     accessible_users: UserType[];

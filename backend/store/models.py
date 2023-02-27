@@ -10,7 +10,6 @@ User = get_user_model()
 class Store(models.Model):
     name = models.CharField(max_length=128)
     logo = models.ImageField(upload_to="images/store", null=True)
-    icon = models.ImageField(upload_to="images/store/icons", null=True)
     moto = models.CharField(max_length=128)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="created_stores")
