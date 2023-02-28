@@ -29,7 +29,9 @@ import DashboardStoreProducts, {
     dashboardStoreProductsLoader,
 } from "./pages/dashboard/storedetails/products";
 import DashboardStoreTransactions from "./pages/dashboard/storedetails/transactions";
-import DashboardStoreSettings from "./pages/dashboard/storedetails/settings";
+import DashboardStoreSettings, {
+    dashboardSettingsAction,
+} from "./pages/dashboard/storedetails/settings";
 
 const route = createBrowserRouter(
     createRoutesFromElements(
@@ -82,7 +84,11 @@ const route = createBrowserRouter(
                             action={productAction}
                         />
                         <Route path="transactions" element={<DashboardStoreTransactions />} />
-                        <Route path="settings" element={<DashboardStoreSettings />} />
+                        <Route
+                            path="settings"
+                            element={<DashboardStoreSettings />}
+                            action={dashboardSettingsAction}
+                        />
                     </Route>
                     <Route path="*" element={<ErrorPage />} />
                 </Route>

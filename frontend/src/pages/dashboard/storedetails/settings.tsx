@@ -1,10 +1,13 @@
-import { Form, useRouteLoaderData } from "react-router-dom";
-import { TextField, Button, ButtonGroup } from "@mui/material";
+import { Form, LoaderFunctionArgs, useRouteLoaderData } from "react-router-dom";
+import { TextField, Button, ButtonGroup, FormControlLabel, Switch } from "@mui/material";
+import Fab from "@mui/material/Fab";
 import { StoreType } from "../store";
 import EditIcon from "@mui/icons-material/Edit";
+import UpdateIcon from "@mui/icons-material/Update";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useRef, useState } from "react";
 import { useThemeContext } from "../../../context/themeContext";
+import { getApiClient } from "../../../utils/authutils";
 
 type ImageFieldProps = {
     defaultUrl?: string;
@@ -73,10 +76,14 @@ export default function DashboardStoreSettings() {
     const { data: storeDetail } = useRouteLoaderData("storeDetailsHome") as { data: StoreType };
     const { name, moto, created, logo, is_public } = storeDetail;
     const { darkTheme } = useThemeContext();
+    const [isPublic, setIsPublic] = useState(is_public);
 
     return (
         <div className="w-full flex items-center justify-center px-4 sm:px-6 py-10 md:px-10">
-            <Form className="w-full max-w-2xl justify-center items-center flex flex-col gap-10">
+            <Form
+                className="w-full max-w-2xl justify-center items-center flex flex-col gap-10"
+                method="post"
+            >
                 <TextField label="Store Name" name="name" fullWidth defaultValue={name} />
                 <TextField
                     label="Store Moto"
@@ -96,7 +103,42 @@ export default function DashboardStoreSettings() {
                         borderColor: darkTheme ? "#4a4b4d" : "#bfc0c1",
                     }}
                 />
+                <div
+                    className="w-full px-1 pr-5  border-2 text-gray-900 dark:text-gray-300 rounded-md"
+                    style={{
+                        borderColor: darkTheme ? "#4a4b4d" : "#bfc0c1",
+                    }}
+                >
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                defaultChecked={is_public}
+                                onChange={() => setIsPublic((prev) => !prev)}
+                            />
+                        }
+                        label={isPublic ? "Make Private" : "Make Public"}
+                        labelPlacement="start"
+                        name="is_public"
+                    />
+                </div>
+                <div className="absolute right-[10%] bottom-10">
+                    <Fab type="submit" color="primary">
+                        <UpdateIcon />
+                    </Fab>
+                </div>
             </Form>
         </div>
     );
+}
+
+export async function dashboardSettingsAction({ params, request }: LoaderFunctionArgs) {
+    const apiClient = getApiClient();
+    const { storeId } = params;
+    const formData = await request.formData();
+    const config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    };
+    return await apiClient.patch(`api/store/${storeId}/`, formData, config);
 }
