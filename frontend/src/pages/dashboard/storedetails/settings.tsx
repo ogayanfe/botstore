@@ -18,7 +18,6 @@ type ImageFieldProps = {
 
 function ImageField({ defaultUrl, styles, name, label }: ImageFieldProps) {
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [disabled, setDisabled] = useState(true);
     const [file, setFile] = useState<File | null>(null);
 
     return (
@@ -29,8 +28,10 @@ function ImageField({ defaultUrl, styles, name, label }: ImageFieldProps) {
                     <Button
                         startIcon={<EditIcon />}
                         onClick={() => {
-                            inputRef.current?.click();
-                            setDisabled(false);
+                            if (inputRef.current) {
+                                inputRef.current.disabled = false;
+                                inputRef.current.click();
+                            }
                         }}
                     >
                         Edit
@@ -38,9 +39,11 @@ function ImageField({ defaultUrl, styles, name, label }: ImageFieldProps) {
                     <Button
                         startIcon={<ClearIcon />}
                         onClick={() => {
-                            setDisabled(true);
                             setFile(null);
-                            if (inputRef.current) inputRef.current.value = "";
+                            if (inputRef.current) {
+                                inputRef.current.value = "";
+                                inputRef.current.disabled = true;
+                            }
                         }}
                     >
                         Clear
@@ -51,10 +54,14 @@ function ImageField({ defaultUrl, styles, name, label }: ImageFieldProps) {
                     name={name}
                     className="fixed -left-[1000000px]"
                     ref={inputRef}
-                    disabled={disabled}
+                    disabled={true}
+                    accept="image/*"
                     onChange={(e) => {
                         const fileList = e.target.files;
-                        if (!fileList) return;
+                        if (!fileList) {
+                            e.target.disabled = true;
+                            return;
+                        }
                         setFile(fileList[0]);
                     }}
                 />
@@ -83,6 +90,7 @@ export default function DashboardStoreSettings() {
             <Form
                 className="w-full max-w-2xl justify-center items-center flex flex-col gap-10"
                 method="post"
+                encType="multipart/form-data"
             >
                 <TextField label="Store Name" name="name" fullWidth defaultValue={name} />
                 <TextField
@@ -96,6 +104,7 @@ export default function DashboardStoreSettings() {
                 <ImageField
                     defaultUrl={logo}
                     label="Store Moto"
+                    name="logo"
                     styles={{
                         border: "1px solid",
                         padding: "20px",
