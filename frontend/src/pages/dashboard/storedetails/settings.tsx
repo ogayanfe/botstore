@@ -3,11 +3,11 @@ import { TextField, Button, ButtonGroup, FormControlLabel, Switch } from "@mui/m
 import Fab from "@mui/material/Fab";
 import { StoreType } from "../store";
 import EditIcon from "@mui/icons-material/Edit";
-import UpdateIcon from "@mui/icons-material/Update";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useRef, useState } from "react";
 import { useThemeContext } from "../../../context/themeContext";
 import { getApiClient } from "../../../utils/authutils";
+import PublishIcon from "@mui/icons-material/Publish";
 
 type ImageFieldProps = {
     defaultUrl?: string;
@@ -66,14 +66,12 @@ function ImageField({ defaultUrl, styles, name, label }: ImageFieldProps) {
                     }}
                 />
             </div>
-            <div className="flex items-center w-full relative my-3 justify-center rounded-2xl overflow-hidden">
-                <div className="bg-gray-200 dark:bg-gray-900 w-fit h-fit max-w-full h-max-full rounded-md overflow-hidden">
-                    <img
-                        src={file ? URL.createObjectURL(file) : defaultUrl}
-                        alt="store logo"
-                        className="w-fit max-w-[500px] rounded-rull max-h-[60vh] object-contain"
-                    />
-                </div>
+            <div className="flex items-center w-full relative my-3 justify-center">
+                <img
+                    src={file ? URL.createObjectURL(file) : defaultUrl}
+                    alt="store logo"
+                    className="max-w-[500px] w-full rounded-rull max-h-[60vh] rounded-sm object-contain"
+                />
             </div>
         </div>
     );
@@ -83,10 +81,10 @@ export default function DashboardStoreSettings() {
     const { data: storeDetail } = useRouteLoaderData("storeDetailsHome") as { data: StoreType };
     const { name, moto, created, logo, is_public } = storeDetail;
     const { darkTheme } = useThemeContext();
-    const [isPublic, setIsPublic] = useState(is_public);
+    const [switchChecked, setSwitchChecked] = useState(is_public);
 
     return (
-        <div className="w-full flex items-center justify-center px-4 sm:px-6 py-10 md:px-10">
+        <div className="w-full flex items-center justify-center px-6 sm:px-6 py-10 pb-[7rem] md:px-10">
             <Form
                 className="w-full max-w-2xl justify-center items-center flex flex-col gap-10"
                 method="post"
@@ -113,26 +111,20 @@ export default function DashboardStoreSettings() {
                     }}
                 />
                 <div
-                    className="w-full px-1 pr-5  border-2 text-gray-900 dark:text-gray-300 rounded-md"
+                    className="text-gray-900 dark:text-gray-200 border-[1px] justify-start rounded-lg items-center w-full"
                     style={{
                         borderColor: darkTheme ? "#4a4b4d" : "#bfc0c1",
                     }}
                 >
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                defaultChecked={is_public}
-                                onChange={() => setIsPublic((prev) => !prev)}
-                            />
-                        }
-                        label={isPublic ? "Make Private" : "Make Public"}
-                        labelPlacement="start"
+                    <Switch
+                        checked={switchChecked}
+                        onChange={(e) => setSwitchChecked(e.target.checked)}
                         name="is_public"
                     />
                 </div>
-                <div className="absolute right-[10%] bottom-10">
-                    <Fab type="submit" color="primary">
-                        <UpdateIcon />
+                <div className="absolute right-7 xl:right-[12%] bottom-10">
+                    <Fab type="submit" aria-label="update" color="primary">
+                        <PublishIcon />
                     </Fab>
                 </div>
             </Form>

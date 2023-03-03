@@ -6,5 +6,6 @@ from . import views
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path("<int:pk>/", views.UserProfileDataAPIView.as_view())
+    path("<int:pk>/", views.UserProfileDataAPIView.as_view()),
+    path("<int:pk>/team/", views.UserCreateListStaffAPIView.as_view())
 ]

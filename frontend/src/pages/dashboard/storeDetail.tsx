@@ -29,7 +29,7 @@ function StoreHeader({ name, id }: storeHeaderProps) {
 
     return (
         <nav className="flex flex-col lg:flex-row .g-font max-lg:gap-4 justify-between px-3 p-3 max-w-[100rem] lg:px-8 items-center w-full">
-            <h2 className="text-blue-600 dark:text-blue-300 text-2xl min-w-[20rem] capitalize">
+            <h2 className="text-blue-600 dark:text-blue-300 text-2xl min-w-[20rem] capitalize max-lg:text-center">
                 {name}
             </h2>
             <div className="flex-grow flex w-full justify-center lg:justify-end">

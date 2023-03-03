@@ -1,14 +1,29 @@
-from django.shortcuts import render
-from rest_framework.generics import RetrieveAPIView
-from django.conf import settings
-from .serializers import UserSerializer
+from rest_framework.generics import RetrieveUpdateAPIView, ListCreateAPIView
+from .serializers import UserSerializer, UserDetailSerializer, UserCreateSerializer
 from django.contrib.auth import get_user_model
-
-# Create your views here.
+from .permissions import IsAuthenticatedAndAndAdminOrReadOnly
 
 User = get_user_model()
 
 
-class UserProfileDataAPIView(RetrieveAPIView):
+class UserProfileDataAPIView(RetrieveUpdateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserDetailSerializer
+
+
+class UserCreateListStaffAPIView(ListCreateAPIView):
+    serializer_class = UserCreateSerializer
+    permission_classes = [IsAuthenticatedAndAndAdminOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_admin:
+            return User.objects.filter(creator=user)
+        return User.objects.filter(creator=user.creator)
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        if self.request.method == "GET":
+            return ctx
+        ctx["creator"] = self.request.user
+        return ctx
