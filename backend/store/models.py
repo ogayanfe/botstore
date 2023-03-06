@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.contrib.humanize.templatetags.humanize import naturaltime
 
@@ -13,10 +14,15 @@ class Store(models.Model):
     moto = models.CharField(max_length=128)
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="created_stores")
-    accessible_users = models.ManyToManyField(
-        User, related_name="accessible_stores", blank=True)
     is_public = models.BooleanField(null=False, default=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def accessible_users(self):
+        """
+        Returns a queryset that contains the users that access store from the dashboard
+        """
+        return User.objects.filter(Q(id=self.owner.id) | Q(creator=self.owner)).distinct()
 
     @property
     def created_string(self):
@@ -24,11 +30,6 @@ class Store(models.Model):
 
     def user_can_edit(self, user):
         return user.id == self.owner.id
-
-    def can_create_products(self, user):
-        if user is None or not user.is_authenticated:
-            return False
-        return self.accessible_users.filter(id=user.id) or self.owner == user
 
     def __str__(self):
         return f"store: {self.name}"
@@ -56,20 +57,9 @@ class Product(models.Model):
 
     def __str__(self):
         return f"product: {self.name} | category: {self.category.name} | store: {self.category.store.name}"
-
-    @classmethod
-    def user_accessible_products(cls, user):
-        """
-        Returns only products a user can access 
-        """
-
-        qs = cls.objects
-        output = qs.filter(category__store__accessible_users__id=user.id) | qs.filter(
-            category__store__owner__id=user.id)
-        return output
-
+    
     def can_edit(self, user):
         if user is None or not user.is_authenticated:
             return False
         store = self.category.store
-        return store.owner == user or store.accessible_users.filter(user__id=user.id)
+        return store.accessible_users.filter(user__id=user.id).exists()

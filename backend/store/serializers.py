@@ -26,8 +26,6 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    # store = StoreSerializer(read_only=True)
-    store = None
     product_count = serializers.SerializerMethodField()
 
     class Meta:

@@ -1,16 +1,16 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from accounts.permissions import IsAuthenticatedAndAndAdminOrReadOnly
 from . import serializers
 from django.contrib.auth import get_user_model
 from . import models
 from django.http import Http404
-from django.shortcuts import get_object_or_404, get_list_or_404
+from django.shortcuts import get_object_or_404
 
 
 User = get_user_model()
 
 
-class StoreListCreateAPIView(ListCreateAPIView):
+class DashboardStoreListCreateAPIView(ListCreateAPIView):
     """
     Users must be authenticated to view this view
     Returns all stores that current user created or can access
@@ -20,31 +20,24 @@ class StoreListCreateAPIView(ListCreateAPIView):
 
     def get_queryset(self):
         user: User = self.request.user
-        return user.created_stores.all() | models.Store.objects.filter(accessible_users__id=user.id)
+        if user.is_admin:
+            return user.created_stores
+        return user.creator.created_stores
 
 
-class StoreRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+class DashboardStoreRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.StoreSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_url_kwarg = "store_id"
-    order_by = "-id"
 
     def get_queryset(self):
         user: User = self.request.user
-        if not user.is_authenticated:
-            return models.Store.objects.filter(is_public=True)
-
-        if self.request.method != "GET":
-            # Only allow owner to modify store details
+        if user.is_admin:
             return user.created_stores.all()
-
-        # allow user to view only stores he created or public groups
-        return user.created_stores.all() | models.Store.objects.filter(is_public=True)
+        return user.creator.created_stores.all()
 
 
-class ProductListAPIView(ListAPIView):
+class DashboardProductListAPIView(ListAPIView):
     serializer_class = serializers.ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_url_kwarg = "store_id"
 
     def get_queryset(self):
@@ -53,32 +46,15 @@ class ProductListAPIView(ListAPIView):
         store = get_object_or_404(models.Store, id=store_id)
         products = models.Product.objects.filter(category__store__id=store_id)
 
-        if not store.can_create_products(user):
-            return products.filter(is_public=True)
+        if not store.accessible_users.contains(user):
+            raise Http404()
 
         return products
 
 
-class ProductCreateAPIView(CreateAPIView):
+class DashboardProductCreateAPIView(CreateAPIView):
     serializer_class = serializers.ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_url_kwarg = "store_id"
-
-    def get_queryset(self):
-        user = self.request.user
-
-        category = get_object_or_404(
-            models.Category, pk=self.kwargs.get(self.lookup_field))
-
-        if category.store != self.kwargs.get("store_id"):
-            raise Http404()
-
-        owned_products = models.Product.objects.filter(
-            category_store__owner=user)
-        contrib_products = models.Product.objects.filter(
-            category__store__accessible__users__id=user.id)
-
-        return owned_products | contrib_products
 
     def get_serializer_context(self):
         # Need to overide this method to pass in category id to serializer
@@ -93,37 +69,29 @@ class ProductCreateAPIView(CreateAPIView):
         return context
 
 
-class ProductRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+class DashboardProductRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.ProductSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_url_kwarg = "prod_id"
 
     def get_queryset(self):
         user = self.request.user
-
-        product = get_object_or_404(
-            models.Product, pk=self.kwargs.get('prod_id')
-        )
-
-        if not product.can_edit(user):
-            return models.Product.objects.filter(is_public=True)
-
-        return models.Product.objects.filter(is_public=True) | models.Product.user_accessible_products(user)
+        if user.is_admin:
+            return models.Product.objects.filter(category__store__owner=user)
+        return models.Product.objects.filter(category__store__owner=user.creator)
 
 
-class CategoriesListCreateAPIView(ListCreateAPIView):
+class DashboardCategoriesListCreateAPIView(ListCreateAPIView):
     serializer_class = serializers.CategorySerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         store_id = self.kwargs.get("store_id")
         user = self.request.user
         store = get_object_or_404(models.Store, pk=store_id)
-        if self.request.method != "GET":
-            if not store.accessible_users.contains(user) or store.owner == user:
-                raise Http404
 
-        return models.Category.objects.filter(store=store)
+        if not store.accessible_users.contains(user):
+            raise Http404
+
+        return store.category_set
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -132,22 +100,15 @@ class CategoriesListCreateAPIView(ListCreateAPIView):
         return ctx
 
 
-class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+class DashboardCategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CategorySerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_url_kwarg = "cat_id"
 
     def get_queryset(self):
         store_id = self.kwargs.get("store_id")
-        cat_id = self.kwargs.get("cat_id")
         user = self.request.user
-        category = get_object_or_404(models.Category, pk=cat_id)
         store = get_object_or_404(models.Store, pk=store_id)
-        if not category.store == store:
+
+        if store.owner != user and store.owner != user.creator:
             raise Http404
-        if self.request.method == "GET":
-            print(store.category_set.all())
-            return store.category_set.all()
-        if store.accessible_users.contains(user) or store.owner == user:
-            return store.category_set.all()
-        raise Http404
+        return store.category_set.all()

@@ -2,21 +2,21 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("", views.StoreListCreateAPIView.as_view()),  # create a list stores
+    # create a list stores
+    path("", views.DashboardStoreListCreateAPIView.as_view()),
     # update, read and delete stores
-    path("<int:store_id>/", views.StoreRetrieveUpdateDestroyAPIView.as_view()),
+    path("<int:store_id>/", views.DashboardStoreRetrieveUpdateDestroyAPIView.as_view()),
     # retrieve, destroy and update a particular product
     path("product/<int:prod_id>/info/",
-         views.ProductRetrieveUpdateDestroyAPIView.as_view()),
+         views.DashboardProductRetrieveUpdateDestroyAPIView.as_view()),
     # list all products by store id
-    path("<int:store_id>/products/", views.ProductListAPIView.as_view()),
-    # create a product pass
+    path("<int:store_id>/products/", views.DashboardProductListAPIView.as_view()),
     path(
         "<int:store_id>/cat/<int:cat_id>/createproduct/",
-        views.ProductCreateAPIView.as_view()
+        views.DashboardProductCreateAPIView.as_view()
     ),
     path("<int:store_id>/categories/",
-         views.CategoriesListCreateAPIView.as_view()),
+         views.DashboardCategoriesListCreateAPIView.as_view()),
     path("<int:store_id>/cat/<int:cat_id>/",
-         views.CategoryRetrieveUpdateDestroyAPIView.as_view())
+         views.DashboardCategoryRetrieveUpdateDestroyAPIView.as_view())
 ]

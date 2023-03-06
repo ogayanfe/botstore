@@ -17,7 +17,7 @@ class UserSerializer(ModelSerializer):
 
 
 class UserDetailSerializer(UserSerializer):
-    creator = SerializerMethodField()
+    creator = UserSerializer()
 
     class Meta:
         model = User
@@ -26,7 +26,6 @@ class UserDetailSerializer(UserSerializer):
     def get_creator(self, obj):
         if obj.creator is None:
             return None
-        return self.serialize_model(obj)
 
 
 class UserCreateSerializer(UserSerializer):
