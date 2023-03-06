@@ -42,7 +42,7 @@ async function signInAction({ request }: { request: Request }) {
         return redirect("/");
     } catch (e) {
         alert("Invalid username or password");
-        redirect("/loging");
+        redirect("/login");
     }
     return null;
 }

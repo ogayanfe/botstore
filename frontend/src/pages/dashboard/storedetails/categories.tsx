@@ -238,7 +238,7 @@ export type { CategoryType };
 export async function storeCategoriesLoader({ params }: LoaderFunctionArgs) {
     const { storeId } = params;
     const apiClient = getApiClient();
-    return apiClient.get(`api/store/${storeId}/categories/`);
+    return apiClient.get(`/store/${storeId}/categories/`);
 }
 
 export async function storeCategoriesAction({ params, request }: ActionFunctionArgs) {
@@ -250,5 +250,5 @@ export async function storeCategoriesAction({ params, request }: ActionFunctionA
             "Content-Type": "multipart/form-data",
         },
     };
-    return await apiClient.post(`/api/store/${storeId}/categories/`, formData, config);
+    return await apiClient.post(`/store/${storeId}/categories/`, formData, config);
 }

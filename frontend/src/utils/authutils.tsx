@@ -4,11 +4,11 @@ import jwtDecode from "jwt-decode";
 
 let axiosClient: AxiosInstance | null = null;
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://localhost:8000/api/dashboard";
 
-const TOKEN_OBTAIN_URL = `${BASE_URL}/api/accounts/token/`;
+const TOKEN_OBTAIN_URL = `${BASE_URL}/accounts/token/`;
 
-const TOKEN_REFRESH_URL = `${BASE_URL}/api/accounts/token/refresh/`;
+const TOKEN_REFRESH_URL = `${BASE_URL}/accounts/token/refresh/`;
 
 const STORAGE_KEY = "tokens";
 

@@ -64,7 +64,7 @@ function DashboardStoreDetail() {
 function dashboardStoreDetailLoader({ params }: LoaderFunctionArgs) {
     const apiClient = getApiClient();
 
-    return apiClient.get(`/api/store/${params.storeId}/`);
+    return apiClient.get(`/store/${params.storeId}/`);
 }
 
 export default DashboardStoreDetail;

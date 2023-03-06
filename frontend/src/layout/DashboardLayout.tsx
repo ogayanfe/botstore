@@ -61,7 +61,7 @@ const dashboardLayoutLoader = async () => {
 
     const { user_id } = jwtDecode<AccessTokenDecodedType>(tokens.access);
 
-    return apiClient.get(`/api/accounts/${user_id}/`);
+    return apiClient.get(`/accounts/${user_id}/`);
 };
 
 export default DashboardLayout;

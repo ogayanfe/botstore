@@ -123,7 +123,7 @@ function Header(props: HeaderPropsType) {
     useEffect(() => {
         const apiClient = getApiClient();
         apiClient
-            .get(`/api/store/${storeId}/categories/`)
+            .get(`/store/${storeId}/categories/`)
             .then((response) => {
                 setCategories(response.data);
             })
@@ -181,7 +181,7 @@ export default function DashboardStoreProducts() {
 
 function dashboardStoreProductsLoader({ params }: LoaderFunctionArgs) {
     const apiClient = getApiClient();
-    return apiClient.get(`api/store/${params.storeId}/products/`);
+    return apiClient.get(`/store/${params.storeId}/products/`);
 }
 
 export async function productAction({ request, params }: ActionFunctionArgs) {
@@ -190,7 +190,7 @@ export async function productAction({ request, params }: ActionFunctionArgs) {
     const apiClient = getApiClient();
     const catId = formData.get("category");
 
-    const url = `/api/store/${storeId}/cat/${catId}/createproduct/`;
+    const url = `/${storeId}/cat/${catId}/createproduct/`;
     try {
         await apiClient.post(url, formData, {
             headers: {

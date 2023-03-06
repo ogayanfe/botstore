@@ -94,7 +94,7 @@ function dashboardStoreLoader() {
         return redirect("/login");
     }
     const apiClient = getApiClient();
-    return apiClient.get("/api/store");
+    return apiClient.get("/store");
 }
 
 export default DashboardStore;

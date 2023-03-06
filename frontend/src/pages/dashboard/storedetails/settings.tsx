@@ -141,5 +141,5 @@ export async function dashboardSettingsAction({ params, request }: LoaderFunctio
             "Content-Type": "multipart/form-data",
         },
     };
-    return await apiClient.patch(`api/store/${storeId}/`, formData, config);
+    return await apiClient.patch(`/store/${storeId}/`, formData, config);
 }
