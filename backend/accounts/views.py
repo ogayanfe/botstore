@@ -1,7 +1,8 @@
 from rest_framework.generics import RetrieveUpdateAPIView, ListCreateAPIView
-from .serializers import UserSerializer, UserDetailSerializer, UserCreateSerializer
+from .serializers import UserDetailSerializer, UserCreateSerializer
 from django.contrib.auth import get_user_model
 from .permissions import IsAuthenticatedAndAndAdminOrReadOnly
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -17,9 +18,7 @@ class UserCreateListStaffAPIView(ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_admin:
-            return User.objects.filter(creator=user)
-        return User.objects.filter(creator=user.creator)
+        return User.objects.filter(Q(creator=user) | (Q(creator=user.creator) & Q(id=user.id)))
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

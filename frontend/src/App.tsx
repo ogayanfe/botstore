@@ -14,7 +14,7 @@ import Signup from "./pages/Signup";
 import { getAuthTokens } from "./utils/authutils";
 import DashboardHome from "./pages/dashboard/home";
 import ThemeContextProvider from "./context/themeContext";
-import DashboardTeam from "./pages/dashboard/team";
+import DashboardTeam, { dashboardTeamLoader } from "./pages/dashboard/team";
 import DashboardSettings from "./pages/dashboard/settings";
 import DashboardStore, { dashboardStoreLoader } from "./pages/dashboard/store";
 import DashboardStoreDetail, { dashboardStoreDetailLoader } from "./pages/dashboard/storeDetail";
@@ -57,7 +57,7 @@ const route = createBrowserRouter(
                     loader={dashboardLayoutLoader}
                 >
                     <Route path="" element={<DashboardHome />} />
-                    <Route path="team" element={<DashboardTeam />} />
+                    <Route path="team" element={<DashboardTeam />} loader={dashboardTeamLoader} />
                     <Route path="settings" element={<DashboardSettings />} />
                     <Route
                         path="store"

@@ -3,6 +3,15 @@ import { useEffect } from "react";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { SearchFormComponent } from "../../components/SearchFormComponent";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { getApiClient, UserType } from "../../utils/authutils";
+import { AxiosResponse } from "axios";
+
+interface TeamMember extends UserType {
+    last_login: string | null;
+    date_joined: string | "";
+    creator: undefined;
+}
 
 function TeamHeader() {
     return (
@@ -17,6 +26,7 @@ function TeamHeader() {
 
 function DashboardTeam() {
     const { setHeaderText } = useDashboardLayoutOutletData();
+    const { data } = useLoaderData() as AxiosResponse<TeamMember[]>;
 
     useEffect(() => {
         setHeaderText("Team");
@@ -31,3 +41,9 @@ function DashboardTeam() {
 }
 
 export default DashboardTeam;
+
+export async function dashboardTeamLoader(params: LoaderFunctionArgs) {
+    const url = "/accounts/teams/";
+    const apiClient = getApiClient();
+    return apiClient.get(url);
+}

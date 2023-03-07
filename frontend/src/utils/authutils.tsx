@@ -15,9 +15,13 @@ const STORAGE_KEY = "tokens";
 interface UserType {
     id: number;
     email: string;
-    first_name: string;
-    last_name: string;
     username: string;
+    is_admin: boolean;
+    creator: null | {
+        id: number;
+        username: string;
+        email: string;
+    };
 }
 
 let authTokens: AuthTokenType | null = null;
