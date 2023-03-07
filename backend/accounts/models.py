@@ -6,6 +6,14 @@ from .managers import UserManager
 
 
 class User(AbstractUser):
+    FIRST_CLASS = "FIRST_CLASS"
+    SECOND_CLASS = "SECOND_CLASS"
+    THIRD_CLASS = "THIRD_CLASS"
+    ACCOUNT_TYPE_CHOICES = [
+        (FIRST_CLASS, 0),
+        (SECOND_CLASS, 1),
+        (THIRD_CLASS, 2)
+    ]
     email = models.EmailField(_('email address'), unique=True)
     username_validator = UnicodeUsernameValidator()
     first_name = None
@@ -23,6 +31,9 @@ class User(AbstractUser):
         },
     )
     creator = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
+    account_type = models.IntegerField(
+        choices=ACCOUNT_TYPE_CHOICES, null=False
+    )
 
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ('username',)

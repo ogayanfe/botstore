@@ -11,7 +11,7 @@ class UserAdmin(UserAdmin):
 
     model = User
 
-    list_display = ('username', 'email', 'is_active',
+    list_display = ('username', 'email', 'is_active', 'account_type',
                     'is_staff', 'is_superuser', 'last_login',)
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     fieldsets = (
