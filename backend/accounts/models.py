@@ -32,7 +32,7 @@ class User(AbstractUser):
     )
     creator = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
     account_type = models.IntegerField(
-        choices=ACCOUNT_TYPE_CHOICES, null=False
+        choices=ACCOUNT_TYPE_CHOICES, null=False, default=0
     )
 
     EMAIL_FIELD = "email"
